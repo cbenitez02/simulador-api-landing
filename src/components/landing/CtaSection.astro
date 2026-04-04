@@ -1,6 +1,8 @@
 ---
-import SectionShell from './ui/SectionShell.astro';
-import { ctaActions } from '../content/landing';
+import SectionShell from '../ui/SectionShell.astro';
+import { landingContent } from '../../content/landing';
+
+const { title, description, actions } = landingContent.cta;
 ---
 
 <!-- v1 has no dedicated login route yet; header login reuses this CTA anchor intentionally. -->
@@ -9,25 +11,22 @@ import { ctaActions } from '../content/landing';
     <div class="cta-card">
       <div class="cta-card__content">
         <h2>
-          BUILD SMARTER.
+          {title[0]}
           <br />
-          <span>MOCK FASTER.</span>
+          <span>{title[1]}</span>
         </h2>
-        <p>
-          Join 15,000+ developers who have stopped waiting for the backend and started building the
-          future.
-        </p>
+        <p>{description}</p>
 
         <div class="cta-card__actions">
-          <a href={ctaActions.primary.href} class="button button--primary button--large">
-            {ctaActions.primary.label}
+          <a href={actions.primary.href} class="button button--primary button--large">
+            {actions.primary.label}
           </a>
           <a
-            href={ctaActions.secondary.href}
+            href={actions.secondary.href}
             class="button button--secondary button--large"
-            title={ctaActions.secondary.placeholderReason}
+            title={actions.secondary.placeholderReason}
           >
-            {ctaActions.secondary.label}
+            {actions.secondary.label}
           </a>
         </div>
       </div>

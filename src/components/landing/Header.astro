@@ -1,11 +1,13 @@
 ---
-import { navLinks } from '../content/landing';
+import { landingContent } from '../../content/landing';
+
+const { brand, navLinks, actions } = landingContent.header;
 ---
 
 <header class="site-header">
   <nav class="shell nav-bar" aria-label="Primary">
     <div class="nav-group nav-group--brand">
-      <a href="#top" class="brand-mark">ArchitectOS</a>
+      <a href="#top" class="brand-mark">{brand}</a>
       <div class="nav-links" aria-label="Sections">
         {navLinks.map((link) => (
           <a href={link.href} class:list={['nav-link', link.active && 'nav-link--active']}>{link.label}</a>
@@ -14,8 +16,8 @@ import { navLinks } from '../content/landing';
     </div>
 
     <div class="nav-group nav-group--actions">
-      <a href="#login" class="button button--ghost button--small">Login</a>
-      <a href="#signup" class="button button--primary button--small">Sign up</a>
+      <a href={actions.login.href} class="button button--ghost button--small">{actions.login.label}</a>
+      <a href={actions.signup.href} class="button button--primary button--small">{actions.signup.label}</a>
     </div>
   </nav>
 </header>

@@ -21,3 +21,7 @@
 - Reduced low-cost placeholder debt by replacing CTA `Launch Console` from `#` to `#login`.
 - Intentionally kept `Enterprise Demo`, `Terms`, `Privacy`, `Github`, and `Status` as placeholders because no real routes or canonical external URLs exist in the approved v1 scope.
 - Those remaining placeholders are now documented in `src/content/landing.ts` with explicit reasons so final verify can classify them as intentional product-scope debt rather than accidental omissions.
+
+## Maintainability notes
+- Landing-specific Astro sections now live under `src/components/landing/`, while cross-cutting primitives remain under `src/components/` and `src/components/ui/`.
+- Narrative copy, CTA labels, dashboard preview data, and footer placeholders are centralized in `src/content/landing.ts` to reduce copy drift across sections without changing the rendered experience.

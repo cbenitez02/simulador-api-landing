@@ -1,16 +1,16 @@
 export const landingAssetPolicy = {
-  remote: [
+  local: [
     {
       name: 'Inter',
-      provider: 'Google Fonts',
-      purpose: 'Primary UI and marketing typography for stitch parity in v1.',
+      location: '/assets/fonts/inter-latin.woff2 + /assets/fonts/inter-latin-ext.woff2',
+      purpose: 'Primary UI and marketing typography self-hosted with local WOFF2 subsets.',
     },
     {
-      name: 'Material Symbols Outlined',
-      provider: 'Google Fonts',
-      purpose: 'Icon font used by the current landing UI in v1.',
+      name: 'Inline SVG icon set',
+      location: 'src/components/Icon.astro',
+      purpose: 'Local outlined icon primitives replacing the remote Material Symbols dependency.',
     },
   ],
   localPlaceholderDir: 'public/assets/',
-  followUp: 'Self-host fonts/icons in public/assets before production hardening.',
+  followUp: 'If the icon surface grows, consider extracting the inline SVG map into a dedicated asset module.',
 } as const;

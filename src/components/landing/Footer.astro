@@ -1,12 +1,14 @@
 ---
-import { footerLinks } from '../content/landing';
+import { landingContent } from '../../content/landing';
+
+const { copyright, links } = landingContent.footer;
 ---
 
 <footer class="site-footer">
   <div class="shell site-footer__content">
-    <span>© 2024 Obsidian Architect. Precision Engine.</span>
+    <span>{copyright}</span>
     <nav aria-label="Footer">
-      {footerLinks.map((link) => (
+      {links.map((link) => (
         <a href={link.href} title={link.placeholderReason}>{link.label}</a>
       ))}
     </nav>

@@ -1,0 +1,29 @@
+---
+import SectionShell from '../ui/SectionShell.astro';
+import { landingContent } from '../../content/landing';
+
+const { title, description, steps, tabs, snippet } = landingContent.codeDemo;
+---
+
+<SectionShell id="docs" sectionClass="section--muted section--framed" contentClass="shell split-grid split-grid--code">
+    <div class="stack-lg">
+      <div class="section-heading section-heading--left">
+        <h2>{title}</h2>
+        <p>{description}</p>
+      </div>
+
+      <ol class="steps-list">
+        {steps.map((step, index) => (
+          <li><span>{index + 1}</span><p>{step}</p></li>
+        ))}
+      </ol>
+    </div>
+
+    <div class="code-panel">
+      <div class="code-panel__tabs">
+        <span class="code-panel__tab code-panel__tab--active">{tabs[0]}</span>
+        <span class="code-panel__tab">{tabs[1]}</span>
+      </div>
+      <pre class="code-panel__body"><code set:html={snippet}></code></pre>
+    </div>
+</SectionShell>

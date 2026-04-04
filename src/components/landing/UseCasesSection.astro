@@ -1,17 +1,19 @@
 ---
-import SectionShell from './ui/SectionShell.astro';
-import { useCases } from '../content/landing';
+import SectionShell from '../ui/SectionShell.astro';
+import { landingContent } from '../../content/landing';
+
+const { title, description, items } = landingContent.useCases;
 ---
 
 <SectionShell id="pricing">
   <div class="stack-xl">
     <div class="section-heading section-heading--narrow">
-      <h2>Master Your Workflow</h2>
-      <p>ArchitectOS adapts to your specific development phase.</p>
+      <h2>{title}</h2>
+      <p>{description}</p>
     </div>
 
     <div class="use-cases-grid">
-      {useCases.map((item) => (
+      {items.map((item) => (
         <article class={`use-case-card use-case-card--${item.tone}`}>
           <h3>{item.title}</h3>
           <p>{item.description}</p>
