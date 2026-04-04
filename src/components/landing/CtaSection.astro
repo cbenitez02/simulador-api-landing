@@ -21,13 +21,13 @@ const { title, description, actions } = landingContent.cta;
           <a href={actions.primary.href} class="button button--primary button--large">
             {actions.primary.label}
           </a>
-          <a
-            href={actions.secondary.href}
+          <span
             class="button button--secondary button--large"
             title={actions.secondary.placeholderReason}
+            aria-disabled="true"
           >
             {actions.secondary.label}
-          </a>
+          </span>
         </div>
       </div>
 

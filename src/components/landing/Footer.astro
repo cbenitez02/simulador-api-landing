@@ -9,7 +9,13 @@ const { copyright, links } = landingContent.footer;
     <span>{copyright}</span>
     <nav aria-label="Footer">
       {links.map((link) => (
-        <a href={link.href} title={link.placeholderReason}>{link.label}</a>
+        link.href === '#' ? (
+          <span class="site-footer__placeholder" title={link.placeholderReason} aria-disabled="true">
+            {link.label}
+          </span>
+        ) : (
+          <a href={link.href} title={link.placeholderReason}>{link.label}</a>
+        )
       ))}
     </nav>
   </div>

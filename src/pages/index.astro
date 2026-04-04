@@ -8,11 +8,12 @@ import CodeDemoSection from '../components/landing/CodeDemoSection.astro';
 import UseCasesSection from '../components/landing/UseCasesSection.astro';
 import CtaSection from '../components/landing/CtaSection.astro';
 import Footer from '../components/landing/Footer.astro';
+import { landingContent } from '../content/landing';
 ---
 
-<BaseLayout>
+<BaseLayout title="ArchitectOS | Generate intelligent mock APIs in seconds" description={landingContent.hero.lead}>
   <Header />
-  <main>
+  <main id="main-content">
     <Hero />
     <ProblemSection />
     <FeaturesSection />
