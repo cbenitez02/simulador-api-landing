@@ -1,0 +1,52 @@
+---
+import Icon from './Icon.astro';
+import SectionShell from './ui/SectionShell.astro';
+---
+
+<SectionShell sectionClass="section--muted" contentClass="shell split-grid split-grid--problem">
+    <div class="stack-lg">
+      <div class="section-heading section-heading--left">
+        <h2>The API Bottleneck is Over</h2>
+        <p>
+          Frontend teams shouldn't stall while backend schemas are being debated. Our AI engine
+          infers data structures and provides realistic response payloads so you can start building
+          before the first line of server code is even written.
+        </p>
+      </div>
+
+      <ul class="problem-list">
+        <li>
+          <Icon name="close" class="problem-list__icon" />
+          <div>
+            <strong>Static JSON Files</strong>
+            <p>Hard to manage, zero logic, and impossible to scale.</p>
+          </div>
+        </li>
+        <li>
+          <Icon name="close" class="problem-list__icon" />
+          <div>
+            <strong>Backend Delays</strong>
+            <p>Waiting weeks for simple endpoint updates or schema changes.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="stats-grid">
+      <article class="metric-card">
+        <strong>64%</strong>
+        <span>Dev Time Wasted</span>
+      </article>
+      <article class="metric-card metric-card--success">
+        <strong>10x</strong>
+        <span>Faster Iteration</span>
+      </article>
+      <blockquote class="quote-card">
+        <p>
+          “We reduced our feature delivery cycle by 3 weeks using ArchitectOS to mock our
+          microservices.”
+        </p>
+        <footer>— Lead Architect, CloudCorp</footer>
+      </blockquote>
+    </div>
+</SectionShell>

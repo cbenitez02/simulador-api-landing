@@ -1,0 +1,38 @@
+---
+import SectionShell from './ui/SectionShell.astro';
+import { ctaActions } from '../content/landing';
+---
+
+<!-- v1 has no dedicated login route yet; header login reuses this CTA anchor intentionally. -->
+<span id="login" aria-hidden="true"></span>
+<SectionShell id="signup" sectionClass="section--cta">
+    <div class="cta-card">
+      <div class="cta-card__content">
+        <h2>
+          BUILD SMARTER.
+          <br />
+          <span>MOCK FASTER.</span>
+        </h2>
+        <p>
+          Join 15,000+ developers who have stopped waiting for the backend and started building the
+          future.
+        </p>
+
+        <div class="cta-card__actions">
+          <a href={ctaActions.primary.href} class="button button--primary button--large">
+            {ctaActions.primary.label}
+          </a>
+          <a
+            href={ctaActions.secondary.href}
+            class="button button--secondary button--large"
+            title={ctaActions.secondary.placeholderReason}
+          >
+            {ctaActions.secondary.label}
+          </a>
+        </div>
+      </div>
+
+      <div class="cta-card__glow cta-card__glow--primary" aria-hidden="true"></div>
+      <div class="cta-card__glow cta-card__glow--secondary" aria-hidden="true"></div>
+    </div>
+</SectionShell>

@@ -1,0 +1,26 @@
+:root {
+  color-scheme: dark;
+  --background: #131313;
+  --surface: #131313;
+  --surface-lowest: #0e0e0e;
+  --surface-low: #1c1b1b;
+  --surface-container: #201f1f;
+  --surface-high: #2a2a2a;
+  --surface-highest: #353534;
+  --surface-variant: rgba(53, 53, 52, 0.4);
+  --text: #e5e2e1;
+  --text-muted: #bccbb9;
+  --outline: rgba(61, 74, 61, 0.2);
+  --outline-strong: rgba(61, 74, 61, 0.35);
+  --primary: #4be277;
+  --primary-strong: #22c55e;
+  --secondary: #3b82f6;
+  --warning: #f7bf1e;
+  --error: #ffb4ab;
+  --error-bg: rgba(147, 0, 10, 0.2);
+  --radius: 4px;
+  --shadow-ghost: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --gradient-primary: linear-gradient(145deg, var(--primary), var(--primary-strong));
+  --hero-radial: radial-gradient(circle at 50% 20%, rgba(34, 197, 94, 0.09), transparent 48%);
+  --hero-grid: linear-gradient(180deg, rgba(229, 226, 225, 0.04), transparent 14rem);
+}

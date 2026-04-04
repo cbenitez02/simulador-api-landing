@@ -1,0 +1,14 @@
+---
+import { footerLinks } from '../content/landing';
+---
+
+<footer class="site-footer">
+  <div class="shell site-footer__content">
+    <span>© 2024 Obsidian Architect. Precision Engine.</span>
+    <nav aria-label="Footer">
+      {footerLinks.map((link) => (
+        <a href={link.href} title={link.placeholderReason}>{link.label}</a>
+      ))}
+    </nav>
+  </div>
+</footer>

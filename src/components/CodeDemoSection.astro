@@ -1,0 +1,40 @@
+---
+import SectionShell from './ui/SectionShell.astro';
+---
+
+<SectionShell id="docs" sectionClass="section--muted section--framed" contentClass="shell split-grid split-grid--code">
+    <div class="stack-lg">
+      <div class="section-heading section-heading--left">
+        <h2>Connect in 3 seconds.</h2>
+        <p>
+          Switch your base URL and you're live. No SDK required, no heavy libraries, just pure REST
+          architecture.
+        </p>
+      </div>
+
+      <ol class="steps-list">
+        <li><span>1</span><p>Describe your entity (e.g. “User with 5 posts”)</p></li>
+        <li><span>2</span><p>Get your unique endpoint</p></li>
+        <li><span>3</span><p>Integrate and start building</p></li>
+      </ol>
+    </div>
+
+    <div class="code-panel">
+      <div class="code-panel__tabs">
+        <span class="code-panel__tab code-panel__tab--active">JavaScript</span>
+        <span class="code-panel__tab">Response JSON</span>
+      </div>
+      <pre class="code-panel__body"><code><span class="token token--keyword">const</span> response = <span class="token token--keyword">await</span> fetch(<span class="token token--primary">'https://api.mock.ai/v1/user/1'</span>);
+<span class="token token--keyword">const</span> data = <span class="token token--keyword">await</span> response.json();
+
+console.log(data.profile);
+
+<span class="token token--muted">// Expected Output:</span>
+&#123;
+  <span class="token token--primary">"id"</span>: <span class="token token--warning">"usr_9281"</span>,
+  <span class="token token--primary">"name"</span>: <span class="token token--warning">"Alex Architect"</span>,
+  <span class="token token--primary">"role"</span>: <span class="token token--warning">"Senior Engineer"</span>,
+  <span class="token token--primary">"tags"</span>: [<span class="token token--warning">"frontend"</span>, <span class="token token--warning">"obsidian"</span>]
+&#125;</code></pre>
+    </div>
+</SectionShell>

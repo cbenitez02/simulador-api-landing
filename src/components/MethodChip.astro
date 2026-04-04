@@ -1,0 +1,9 @@
+---
+interface Props {
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+}
+
+const { method } = Astro.props;
+---
+
+<span class={`method-chip method-chip--${method.toLowerCase()}`}>{method}</span>

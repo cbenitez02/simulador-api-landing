@@ -1,0 +1,21 @@
+---
+import { navLinks } from '../content/landing';
+---
+
+<header class="site-header">
+  <nav class="shell nav-bar" aria-label="Primary">
+    <div class="nav-group nav-group--brand">
+      <a href="#top" class="brand-mark">ArchitectOS</a>
+      <div class="nav-links" aria-label="Sections">
+        {navLinks.map((link) => (
+          <a href={link.href} class:list={['nav-link', link.active && 'nav-link--active']}>{link.label}</a>
+        ))}
+      </div>
+    </div>
+
+    <div class="nav-group nav-group--actions">
+      <a href="#login" class="button button--ghost button--small">Login</a>
+      <a href="#signup" class="button button--primary button--small">Sign up</a>
+    </div>
+  </nav>
+</header>
