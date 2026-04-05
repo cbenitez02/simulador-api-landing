@@ -1,14 +1,23 @@
 export const landingContent = {
   header: {
-    brand: 'ArchitectOS',
+    brand: 'API Mock AI',
     navLinks: [
-      { label: 'Features', href: '#features', active: true },
-      { label: 'Pricing', href: '#pricing', active: false },
-      { label: 'Docs', href: '#docs', active: false },
+      {
+        label: 'Platform',
+        href: '#',
+        placeholderReason: 'Platform page or section does not exist yet.',
+      },
+      { label: 'Documentation', href: '#docs' },
+      {
+        label: 'Changelog',
+        href: '#',
+        placeholderReason: 'Changelog page or section does not exist yet.',
+      },
+      { label: 'Pricing', href: '#pricing' },
     ],
     actions: {
-      login: { label: 'Login', href: '#login' },
-      signup: { label: 'Sign up', href: '#signup' },
+      login: { label: 'Sign In', href: '#login' },
+      signup: { label: 'Get Started', href: '#signup' },
     },
   },
   hero: {
