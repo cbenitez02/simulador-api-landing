@@ -1,24 +1,27 @@
 ---
-import SectionShell from '../ui/SectionShell.astro';
+import Icon from '../Icon.astro';
 import { landingContent } from '../../content/landing';
 
-const { title, description, items } = landingContent.useCases;
+const { title } = landingContent.useCases;
+const items = [...landingContent.useCases.items];
 ---
 
-<SectionShell id="pricing">
-  <div class="stack-xl">
-    <div class="section-heading section-heading--narrow">
+<section class="landing-section landing-use-cases" id="use-cases">
+  <div class="shell">
+    <div class="landing-section-heading">
       <h2>{title}</h2>
-      <p>{description}</p>
     </div>
 
-    <div class="use-cases-grid">
-      {items.map((item) => (
-        <article class={`use-case-card use-case-card--${item.tone}`}>
+    <div class="landing-use-cases__grid">
+      {items.map((item: (typeof items)[number]) => (
+        <article class="landing-use-case-card">
+          <div class={`landing-use-case-card__icon landing-tone-panel--${item.tone}`}>
+            <Icon name={item.icon} />
+          </div>
           <h3>{item.title}</h3>
           <p>{item.description}</p>
         </article>
       ))}
     </div>
   </div>
-</SectionShell>
+</section>

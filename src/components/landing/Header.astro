@@ -1,25 +1,20 @@
 ---
-import { landingContent } from '../../content/landing';
+import { landingContent, type LandingLink } from '../../content/landing';
 
-const { brand, actions } = landingContent.header;
-const navLinks = landingContent.header.navLinks as unknown as Array<{
-  label: string;
-  href: string;
-  placeholderReason?: string;
-}>;
-const navItems = navLinks.map((link) => ({
-  ...link,
-  isPlaceholder: link.href === '#',
-}));
+const { brand } = landingContent.header;
+const navLinks: LandingLink[] = [...landingContent.header.navLinks];
+const primaryAction: LandingLink = landingContent.header.primaryAction;
 ---
 
 <header class="site-header">
   <nav class="shell site-header__shell" aria-label="Primary">
     <div class="site-header__group site-header__group--brand">
-      <a href="#top" class="site-header__brand">{brand}</a>
+      <a href="/" class="site-header__brand">{brand}</a>
       <div class="site-header__nav" aria-label="Sections">
-        {navItems.map((link) => (
-          link.isPlaceholder ? (
+        {navLinks.map((link) => (
+          'href' in link ? (
+            <a href={link.href} class="site-header__link">{link.label}</a>
+          ) : (
             <span
               class="site-header__link site-header__link--placeholder"
               title={link.placeholderReason}
@@ -27,19 +22,14 @@ const navItems = navLinks.map((link) => ({
             >
               {link.label}
             </span>
-          ) : (
-            <a href={link.href} class="site-header__link">{link.label}</a>
           )
         ))}
       </div>
     </div>
 
     <div class="site-header__group site-header__group--actions">
-      <a href={actions.login.href} class="button button--small site-header__action site-header__action--ghost">
-        {actions.login.label}
-      </a>
-      <a href={actions.signup.href} class="button button--primary button--small site-header__action">
-        {actions.signup.label}
+      <a href={primaryAction.href} class="button button--primary button--small site-header__action">
+        {primaryAction.label}
       </a>
     </div>
   </nav>

@@ -2,7 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/landing/Header.astro';
 import Hero from '../components/landing/Hero.astro';
-import ProblemSection from '../components/landing/ProblemSection.astro';
+import SimulationSection from '../components/landing/SimulationSection.astro';
+import HowItWorksSection from '../components/landing/HowItWorksSection.astro';
 import FeaturesSection from '../components/landing/FeaturesSection.astro';
 import CodeDemoSection from '../components/landing/CodeDemoSection.astro';
 import UseCasesSection from '../components/landing/UseCasesSection.astro';
@@ -11,15 +12,18 @@ import Footer from '../components/landing/Footer.astro';
 import { landingContent } from '../content/landing';
 ---
 
-<BaseLayout title="ArchitectOS | Generate intelligent mock APIs in seconds" description={landingContent.hero.lead}>
-  <Header />
-  <main id="main-content">
-    <Hero />
-    <ProblemSection />
-    <FeaturesSection />
-    <CodeDemoSection />
-    <UseCasesSection />
-    <CtaSection />
-  </main>
-  <Footer />
+<BaseLayout title={landingContent.seo.title} description={landingContent.seo.description}>
+  <div class="landing-page">
+    <Header />
+    <main id="main-content">
+      <Hero />
+      <SimulationSection />
+      <HowItWorksSection />
+      <FeaturesSection />
+      <CodeDemoSection />
+      <UseCasesSection />
+      <CtaSection />
+    </main>
+    <Footer />
+  </div>
 </BaseLayout>

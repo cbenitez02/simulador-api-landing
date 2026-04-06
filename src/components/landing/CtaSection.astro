@@ -1,37 +1,22 @@
 ---
-import SectionShell from '../ui/SectionShell.astro';
-import { landingContent } from '../../content/landing';
+import { landingContent, type LandingLink } from '../../content/landing';
 
-const { title, description, actions } = landingContent.cta;
+const { title, description } = landingContent.cta;
+const primaryAction: LandingLink = landingContent.cta.primaryAction;
 ---
 
-<!-- v1 has no dedicated login route yet; header login reuses this CTA anchor intentionally. -->
-<span id="login" aria-hidden="true"></span>
-<SectionShell id="signup" sectionClass="section--cta">
-    <div class="cta-card">
-      <div class="cta-card__content">
-        <h2>
-          {title[0]}
-          <br />
-          <span>{title[1]}</span>
-        </h2>
+<section class="landing-section landing-cta" id="cta">
+  <div class="shell">
+    <div class="landing-cta__card">
+      <div class="landing-cta__content">
+        <h2>{title}</h2>
         <p>{description}</p>
-
-        <div class="cta-card__actions">
-          <a href={actions.primary.href} class="button button--primary button--large">
-            {actions.primary.label}
+        {'href' in primaryAction && (
+          <a href={primaryAction.href} class="button button--primary button--large">
+            {primaryAction.label}
           </a>
-          <span
-            class="button button--secondary button--large"
-            title={actions.secondary.placeholderReason}
-            aria-disabled="true"
-          >
-            {actions.secondary.label}
-          </span>
-        </div>
+        )}
       </div>
-
-      <div class="cta-card__glow cta-card__glow--primary" aria-hidden="true"></div>
-      <div class="cta-card__glow cta-card__glow--secondary" aria-hidden="true"></div>
     </div>
-</SectionShell>
+  </div>
+</section>

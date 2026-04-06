@@ -8,8 +8,8 @@ interface Props {
 }
 
 const {
-  title = 'ArchitectOS | Generate intelligent mock APIs in seconds',
-  description = landingContent.hero.lead,
+  title = landingContent.seo.title,
+  description = landingContent.seo.description,
 } = Astro.props;
 
 const siteName = landingContent.header.brand;
@@ -35,6 +35,7 @@ const structuredData = {
       },
       description,
       featureList: landingContent.features.items.map((item) => item.title),
+      keywords: landingContent.useCases.items.map((item) => item.title).join(', '),
       inLanguage: 'en',
       ...(canonicalUrl ? { url: canonicalUrl } : {}),
     },

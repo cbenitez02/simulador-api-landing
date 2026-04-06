@@ -1,29 +1,30 @@
 ---
-import SectionShell from '../ui/SectionShell.astro';
 import { landingContent } from '../../content/landing';
 
-const { title, description, steps, tabs, snippet } = landingContent.codeDemo;
+const { requestLabel, requestCode, responseLabel, responseStatus, responseTime, responseCode } = landingContent.demo;
 ---
 
-<SectionShell id="docs" sectionClass="section--muted section--framed" contentClass="shell split-grid split-grid--code">
-    <div class="stack-lg">
-      <div class="section-heading section-heading--left">
-        <h2>{title}</h2>
-        <p>{description}</p>
+<section class="landing-section landing-demo" id="demo">
+  <div class="shell landing-demo__grid">
+    <article class="landing-demo-panel landing-demo-panel--request">
+      <div class="landing-demo-panel__header">
+        <span>{requestLabel}</span>
+        <div class="landing-demo-panel__dots" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
       </div>
+      <pre>{requestCode.join('\n')}</pre>
+      <button type="button" class="landing-demo__copy">↳ COPY CODE</button>
+    </article>
 
-      <ol class="steps-list">
-        {steps.map((step, index) => (
-          <li><span>{index + 1}</span><p>{step}</p></li>
-        ))}
-      </ol>
-    </div>
-
-    <div class="code-panel">
-      <div class="code-panel__tabs">
-        <span class="code-panel__tab code-panel__tab--active">{tabs[0]}</span>
-        <span class="code-panel__tab">{tabs[1]}</span>
+    <article class="landing-demo-panel landing-demo-panel--response">
+      <div class="landing-demo-panel__header">
+        <span>{responseLabel}</span>
+        <strong>
+          {responseStatus} <span>{responseTime}</span>
+        </strong>
       </div>
-      <pre class="code-panel__body"><code set:html={snippet}></code></pre>
-    </div>
-</SectionShell>
+      <pre>{responseCode.join('\n')}</pre>
+    </article>
+  </div>
+</section>

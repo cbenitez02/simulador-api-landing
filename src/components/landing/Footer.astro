@@ -1,20 +1,24 @@
 ---
-import { landingContent } from '../../content/landing';
+import { landingContent, type LandingLink } from '../../content/landing';
 
-const { copyright, links } = landingContent.footer;
+const { brand, copyright } = landingContent.footer;
+const links: LandingLink[] = [...landingContent.footer.links];
 ---
 
 <footer class="site-footer">
   <div class="shell site-footer__content">
-    <span>{copyright}</span>
+    <div class="site-footer__brand-block">
+      <strong>{brand}</strong>
+      <span>{copyright}</span>
+    </div>
     <nav aria-label="Footer">
       {links.map((link) => (
-        link.href === '#' ? (
+        'href' in link ? (
+          <a href={link.href}>{link.label}</a>
+        ) : (
           <span class="site-footer__placeholder" title={link.placeholderReason} aria-disabled="true">
             {link.label}
           </span>
-        ) : (
-          <a href={link.href} title={link.placeholderReason}>{link.label}</a>
         )
       ))}
     </nav>

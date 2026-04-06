@@ -1,39 +1,20 @@
 ---
 import Icon from '../Icon.astro';
-import SectionShell from '../ui/SectionShell.astro';
 import { landingContent } from '../../content/landing';
 
-const { title, items } = landingContent.features;
+const items = [...landingContent.features.items];
 ---
 
-<SectionShell id="features">
-  <div class="stack-xl">
-    <div class="section-heading">
-      <h2>{title}</h2>
-    </div>
-
-    <div class="feature-grid">
-      {items.map((item) => {
-        const variantClasses = item.variant
-          ? item.variant.split(' ').map((variant: string) => `feature-card--${variant}`)
-          : [];
-
-        return (
-          <article class:list={['feature-card', ...variantClasses]}>
-            <div class="stack-md feature-card__content">
-              <Icon name={item.icon} class={`feature-card__icon feature-card__icon--${item.iconTone}`} />
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-            </div>
-
-            {item.variant?.includes('decorated') && (
-              <div class="feature-orb feature-orb--secondary" aria-hidden="true"></div>
-            )}
-
-            {item.snippet && <pre class="error-snippet">{item.snippet}</pre>}
-          </article>
-        );
-      })}
-    </div>
+<section class="landing-section landing-features" id="features">
+  <div class="shell landing-features__grid">
+    {items.map((item: (typeof items)[number]) => (
+      <article class="landing-feature-card">
+        <div class={`landing-feature-card__icon landing-tone-panel--${item.tone}`}>
+          <Icon name={item.icon} />
+        </div>
+        <h3>{item.title}</h3>
+        <p>{item.description}</p>
+      </article>
+    ))}
   </div>
-</SectionShell>
+</section>
