@@ -2,6 +2,13 @@
 import '../styles/global.css';
 import { landingContent } from '../content/landing';
 
+const canonicalLandingContent = landingContent as {
+  seo: { title: string; description: string };
+  footer: { brand?: string };
+  features: { items: ReadonlyArray<{ title: string }> };
+  useCases: { items: ReadonlyArray<{ title: string }> };
+};
+
 interface Props {
   title?: string;
   description?: string;
@@ -9,9 +16,9 @@ interface Props {
 }
 
 const {
-  title = landingContent.seo.title,
-  description = landingContent.seo.description,
-  siteName = landingContent.header.brand,
+  title = canonicalLandingContent.seo.title,
+  description = canonicalLandingContent.seo.description,
+  siteName = canonicalLandingContent.footer.brand ?? 'Obsidian Architect',
 } = Astro.props;
 const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
 const structuredData = {
@@ -34,8 +41,8 @@ const structuredData = {
         audienceType: 'Frontend teams and developers',
       },
       description,
-      featureList: landingContent.features.items.map((item) => item.title),
-      keywords: landingContent.useCases.items.map((item) => item.title).join(', '),
+      featureList: canonicalLandingContent.features.items.map((item) => item.title),
+      keywords: canonicalLandingContent.useCases.items.map((item) => item.title).join(', '),
       inLanguage: 'en',
       ...(canonicalUrl ? { url: canonicalUrl } : {}),
     },

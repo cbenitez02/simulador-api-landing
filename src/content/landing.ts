@@ -19,12 +19,12 @@ export type LandingIconName =
 
 export const landingContent = {
   seo: {
-    title: 'ObsidianArchitect | API Mock AI',
+    title: 'Obsidian Architect | API Mock AI',
     description:
       'Mock APIs with real-world behavior in seconds. Generate endpoints from prompts or JSON, simulate latency and failures, and unblock frontend delivery without waiting for a backend.',
   },
   header: {
-    brand: 'ObsidianArchitect',
+    brand: 'Obsidian Architect',
     navLinks: [
       { label: 'Platform', href: '#simulation' },
       {

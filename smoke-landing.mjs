@@ -8,9 +8,11 @@ const HOST = process.env.SMOKE_HOST ?? '127.0.0.1';
 const PORT = Number(process.env.SMOKE_PORT ?? 4321);
 const BASE_URL = `http://${HOST}:${PORT}`;
 const TIMEOUT_MS = Number(process.env.SMOKE_TIMEOUT_MS ?? 30000);
+const CANONICAL_BRAND = 'Obsidian Architect';
+const LEGACY_BRAND = 'ObsidianArchitect';
 const SECTION_ORDER = ['top', 'simulation', 'how-it-works', 'features', 'demo', 'use-cases', 'cta'];
 const LANDING_REQUIRED_SIGNALS = [
-  'ObsidianArchitect',
+  CANONICAL_BRAND,
   'Mock APIs with',
   'real-world',
   'behavior in seconds',
@@ -27,13 +29,13 @@ const LANDING_REQUIRED_SIGNALS = [
   'Accelerate every phase of development',
   'Edge Case Testing',
   'Start building without a backend today',
-  'Obsidian Architect',
+  CANONICAL_BRAND,
   'Docs',
   'GitHub',
   'Contact',
 ];
 const PRICING_REQUIRED_SIGNALS = [
-  'Obsidian Architect Pricing',
+  `${CANONICAL_BRAND} Pricing`,
   'Precision-engineered pricing for resilient frontend teams',
   'Monthly',
   'Yearly',
@@ -44,7 +46,7 @@ const PRICING_REQUIRED_SIGNALS = [
   'Why Engineer-First Mocks?',
   'Feature matrix',
   'Developer FAQ',
-  'Do I need a backend before using Obsidian Architect?',
+  `Do I need a backend before using ${CANONICAL_BRAND}?`,
 ];
 const LANDING_DISABLED_PLACEHOLDER_LABELS = ['Documentation', 'Changelog', 'Docs', 'GitHub', 'Contact'];
 const PRICING_DISABLED_PLACEHOLDER_LABELS = ['Documentation', 'Changelog', 'Docs', 'GitHub', 'Contact'];
@@ -156,6 +158,111 @@ function getInlineStyles(html) {
   return [...html.matchAll(/<style(?:\s[^>]*)?>([\s\S]*?)<\/style>/gi)].map(([, css]) => css);
 }
 
+function getTitleText(html) {
+  const match = html.match(/<title>([\s\S]*?)<\/title>/i);
+
+  if (!match) {
+    throw new Error('Expected page HTML to include a <title> element.');
+  }
+
+  return decodeHtmlEntities(match[1].trim());
+}
+
+function getMetaContent(html, attribute, value) {
+  const metaTagPattern = new RegExp(
+    `<meta(?=[^>]*${attribute}=["']${escapeRegExp(value)}["'])[^>]*content=["']([^"']*)["'][^>]*>`,
+    'i',
+  );
+  const match = html.match(metaTagPattern);
+
+  return match ? decodeHtmlEntities(match[1].trim()) : undefined;
+}
+
+function getJsonLdBlocks(html) {
+  return [...html.matchAll(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)].map(
+    ([, content]) => content.trim(),
+  );
+}
+
+function decodeHtmlEntities(value) {
+  return value
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+}
+
+function collectJsonLdNames(input, names = []) {
+  if (Array.isArray(input)) {
+    input.forEach((item) => collectJsonLdNames(item, names));
+    return names;
+  }
+
+  if (input && typeof input === 'object') {
+    Object.entries(input).forEach(([key, value]) => {
+      if (key === 'name' && typeof value === 'string') {
+        names.push(value);
+        return;
+      }
+
+      collectJsonLdNames(value, names);
+    });
+  }
+
+  return names;
+}
+
+function assertMetadataBranding(html, routeLabel) {
+  const title = getTitleText(html);
+  const metadataChecks = [
+    { label: 'page title', value: title, required: true },
+    { label: 'Open Graph title', value: getMetaContent(html, 'property', 'og:title') },
+    { label: 'Open Graph site name', value: getMetaContent(html, 'property', 'og:site_name') },
+    { label: 'Twitter title', value: getMetaContent(html, 'name', 'twitter:title') },
+  ];
+
+  metadataChecks.forEach(({ label, value, required = false }) => {
+    if (!value) {
+      if (required) {
+        throw new Error(`Expected ${routeLabel} ${label} metadata to be present.`);
+      }
+
+      return;
+    }
+
+    if (!value.includes(CANONICAL_BRAND)) {
+      throw new Error(`Expected ${routeLabel} ${label} metadata to include "${CANONICAL_BRAND}".`);
+    }
+
+    if (value.includes(LEGACY_BRAND)) {
+      throw new Error(`Expected ${routeLabel} ${label} metadata to reject legacy brand "${LEGACY_BRAND}".`);
+    }
+  });
+
+  const jsonLdNames = getJsonLdBlocks(html)
+    .flatMap((block) => {
+      try {
+        return collectJsonLdNames(JSON.parse(block));
+      } catch (error) {
+        throw new Error(`Could not parse ${routeLabel} JSON-LD metadata: ${error.message}`);
+      }
+    })
+    .filter((value) => typeof value === 'string');
+
+  if (jsonLdNames.length === 0) {
+    throw new Error(`Expected ${routeLabel} to expose a JSON-LD branding signal.`);
+  }
+
+  if (!jsonLdNames.some((value) => value.includes(CANONICAL_BRAND))) {
+    throw new Error(`Expected ${routeLabel} JSON-LD metadata to include "${CANONICAL_BRAND}".`);
+  }
+
+  if (jsonLdNames.some((value) => value.includes(LEGACY_BRAND))) {
+    throw new Error(`Expected ${routeLabel} JSON-LD metadata to reject legacy brand "${LEGACY_BRAND}".`);
+  }
+}
+
 function getDisabledPlaceholderPattern(label) {
   return new RegExp(
     `<span(?=[^>]*aria-disabled="true")(?=[^>]*title="[^"]+")[^>]*>\\s*${label}\\s*<\\/span>`,
@@ -236,6 +343,8 @@ try {
     throw new Error(`Landing is missing expected visible signals: ${missingSignals.join(', ')}`);
   }
 
+  assertMetadataBranding(html, 'landing');
+
   const missingPlaceholders = LANDING_DISABLED_PLACEHOLDER_LABELS.filter(
     (label) => !getDisabledPlaceholderPattern(label).test(html),
   );
@@ -248,6 +357,10 @@ try {
 
   if (html.includes('href="#"')) {
     throw new Error('Landing still exposes deceptive href="#" placeholders.');
+  }
+
+  if (html.includes(LEGACY_BRAND)) {
+    throw new Error(`Landing still exposes the non-canonical ${LEGACY_BRAND} branding variant.`);
   }
 
   if (!getHrefPattern('Pricing', '/pricing').test(html)) {
@@ -336,6 +449,8 @@ try {
     throw new Error(`Pricing page is missing expected visible signals: ${pricingMissingSignals.join(', ')}`);
   }
 
+  assertMetadataBranding(pricingHtml, 'pricing');
+
   const pricingMissingPlaceholders = PRICING_DISABLED_PLACEHOLDER_LABELS.filter(
     (label) => !getDisabledPlaceholderPattern(label).test(pricingHtml),
   );
@@ -360,8 +475,8 @@ try {
     assertIncludes(pricingHtml, signal, 'pricing page'),
   );
 
-  if (pricingHtml.includes('ObsidianArchitect')) {
-    throw new Error('Pricing page still exposes the non-canonical ObsidianArchitect branding variant.');
+  if (pricingHtml.includes(LEGACY_BRAND)) {
+    throw new Error(`Pricing page still exposes the non-canonical ${LEGACY_BRAND} branding variant.`);
   }
 
   console.log(`Smoke test passed for ${BASE_URL}/`);

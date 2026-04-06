@@ -9,7 +9,7 @@ interface Props {
 
 const {
   pageClass = 'landing-page',
-  brand = 'Obsidian Architect',
+  brand,
   copyright = landingContent.footer.copyright,
 } = Astro.props;
 
@@ -21,7 +21,7 @@ const footerContent = landingContent.footer as {
   links: readonly LinkLike[];
 };
 
-const resolvedBrand = brand ?? footerContent.brand ?? 'Obsidian Architect';
+const resolvedBrand = brand ?? footerContent.brand;
 const links = [...footerContent.links] as LinkLike[];
 
 function hasHref(link: LinkLike): link is Extract<LinkLike, { href: string }> {
