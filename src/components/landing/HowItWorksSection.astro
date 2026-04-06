@@ -1,0 +1,26 @@
+---
+import { landingContent } from '../../content/landing';
+
+const { title } = landingContent.steps;
+const items = [...landingContent.steps.items];
+---
+
+<section class="landing-section landing-steps" id="how-it-works">
+  <div class="shell">
+    <div class="landing-section-heading">
+      <h2>{title}</h2>
+    </div>
+
+    <ol class="landing-steps__grid">
+      {items.map((item: (typeof items)[number], index: number) => (
+        <li class="landing-step-card">
+          <span class:list={['landing-step-card__index', index === items.length - 1 && 'landing-step-card__index--active']}>
+            {index + 1}
+          </span>
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

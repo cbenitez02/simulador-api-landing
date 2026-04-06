@@ -1,45 +1,46 @@
 ---
-import { landingContent } from '../../content/landing';
+import { landingContent, type ShellLink } from '../../content/landing';
 
-const { brand, actions } = landingContent.header;
-const navLinks = landingContent.header.navLinks as unknown as Array<{
-  label: string;
-  href: string;
-  placeholderReason?: string;
-}>;
-const navItems = navLinks.map((link) => ({
-  ...link,
-  isPlaceholder: link.href === '#',
-}));
+interface Props {
+  activeNavLabel?: string;
+  pageClass?: 'landing-page' | 'pricing-page';
+  brand?: string;
+   primaryAction?: ShellLink;
+   navLinks?: readonly ShellLink[];
+}
+
+const {
+  activeNavLabel,
+  pageClass = 'landing-page',
+  brand = landingContent.header.brand,
+  primaryAction,
+  navLinks,
+} = Astro.props;
+
+const resolvedNavLinks = navLinks ?? landingContent.header.navLinks;
+const resolvedPrimaryAction = primaryAction ?? landingContent.header.primaryAction;
 ---
 
-<header class="site-header">
+<header class={`site-header ${pageClass}__site-header`.trim()}>
   <nav class="shell site-header__shell" aria-label="Primary">
     <div class="site-header__group site-header__group--brand">
-      <a href="#top" class="site-header__brand">{brand}</a>
+      <a href="/" class="site-header__brand">{brand}</a>
       <div class="site-header__nav" aria-label="Sections">
-        {navItems.map((link) => (
-          link.isPlaceholder ? (
-            <span
-              class="site-header__link site-header__link--placeholder"
-              title={link.placeholderReason}
-              aria-disabled="true"
-            >
-              {link.label}
-            </span>
-          ) : (
-            <a href={link.href} class="site-header__link">{link.label}</a>
-          )
+        {resolvedNavLinks.map((link) => (
+          <a
+            href={link.href}
+            class:list={['site-header__link', activeNavLabel === link.label && 'site-header__link--active']}
+            aria-current={activeNavLabel === link.label ? 'page' : undefined}
+          >
+            {link.label}
+          </a>
         ))}
       </div>
     </div>
 
     <div class="site-header__group site-header__group--actions">
-      <a href={actions.login.href} class="button button--small site-header__action site-header__action--ghost">
-        {actions.login.label}
-      </a>
-      <a href={actions.signup.href} class="button button--primary button--small site-header__action">
-        {actions.signup.label}
+      <a href={resolvedPrimaryAction.href} class="button button--primary button--small site-header__action">
+        {resolvedPrimaryAction.label}
       </a>
     </div>
   </nav>

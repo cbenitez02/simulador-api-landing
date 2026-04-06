@@ -1,22 +1,32 @@
 ---
-import { landingContent } from '../../content/landing';
+import { landingContent, type ShellLink } from '../../content/landing';
 
-const { copyright, links } = landingContent.footer;
+interface Props {
+  pageClass?: 'landing-page' | 'pricing-page';
+  brand?: string;
+  copyright?: string;
+  links?: readonly ShellLink[];
+}
+
+const {
+  pageClass = 'landing-page',
+  brand,
+  copyright = landingContent.footer.copyright,
+  links: linksOverride,
+} = Astro.props;
+
+const resolvedBrand = brand ?? landingContent.footer.brand;
+const links = linksOverride ?? landingContent.footer.links;
 ---
 
-<footer class="site-footer">
+<footer class={`site-footer ${pageClass}__site-footer`.trim()}>
   <div class="shell site-footer__content">
-    <span>{copyright}</span>
+    <div class="site-footer__brand-block">
+      <strong>{resolvedBrand}</strong>
+      <span>{copyright}</span>
+    </div>
     <nav aria-label="Footer">
-      {links.map((link) => (
-        link.href === '#' ? (
-          <span class="site-footer__placeholder" title={link.placeholderReason} aria-disabled="true">
-            {link.label}
-          </span>
-        ) : (
-          <a href={link.href} title={link.placeholderReason}>{link.label}</a>
-        )
-      ))}
+      {links.map((link) => <a href={link.href}>{link.label}</a>)}
     </nav>
   </div>
 </footer>

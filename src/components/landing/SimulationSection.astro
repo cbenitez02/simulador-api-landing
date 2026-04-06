@@ -1,0 +1,52 @@
+---
+import Icon from '../Icon.astro';
+import MethodChip from '../MethodChip.astro';
+import { landingContent } from '../../content/landing';
+
+const { title, description, endpoint } = landingContent.simulation;
+const bullets = [...landingContent.simulation.bullets];
+const scenarios = [...landingContent.simulation.scenarios];
+---
+
+<section class="landing-section landing-simulation" id="simulation">
+  <div class="shell landing-simulation__grid">
+    <div class="landing-simulation__copy">
+      <h2>{title}</h2>
+      <p>{description}</p>
+
+      <ul class="landing-simulation__bullets">
+        {bullets.map((bullet: string) => (
+          <li>
+            <Icon name="check_circle" />
+            <span>{bullet}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="landing-simulation__panel">
+      <div class="landing-simulation__endpoint">
+        <div>
+          <MethodChip method={endpoint.method} />
+          <span>{endpoint.route}</span>
+        </div>
+        <span>{endpoint.latency}</span>
+      </div>
+
+      <div class="landing-simulation__scenarios">
+        {scenarios.map((scenario: (typeof scenarios)[number]) => (
+          <article class="landing-scenario-card">
+            <div class={`landing-scenario-card__weight landing-tone-panel--${scenario.tone}`}>
+              <strong>{scenario.probability}</strong>
+            </div>
+            <div class="landing-scenario-card__copy">
+              <h3>{scenario.title}</h3>
+              <p>{scenario.description}</p>
+            </div>
+            <Icon name="settings" />
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

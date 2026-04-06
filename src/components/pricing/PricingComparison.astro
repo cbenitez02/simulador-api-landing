@@ -1,0 +1,64 @@
+---
+import Icon from '../Icon.astro';
+import type { PricingComparisonRow, PricingComparisonRowValue } from '../../content/pricing';
+
+interface Props {
+  comparison: {
+    title: string;
+    columns: readonly string[];
+    rows: readonly PricingComparisonRow[];
+  };
+}
+
+const { comparison } = Astro.props;
+
+function isIncluded(value: PricingComparisonRowValue) {
+  return 'included' in value && value.included === true;
+}
+
+function isEmphasis(value: PricingComparisonRowValue) {
+  return 'emphasis' in value && value.emphasis === true;
+}
+---
+
+<section class="pricing-section pricing-comparison" id="comparison" aria-labelledby="comparison-title">
+  <div class="shell">
+    <div class="pricing-comparison__frame">
+      <div class="pricing-comparison__header">
+        <h2 id="comparison-title">{comparison.title}</h2>
+      </div>
+
+      <div class="pricing-comparison__table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Capability</th>
+              {comparison.columns.map((column) => (
+                <th scope="col" class:list={[column === 'Pro' && 'is-featured-column']}>{column}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {comparison.rows.map((row) => (
+              <tr>
+                <th scope="row">{row.capability}</th>
+                {row.values.map((value, index) => (
+                  <td class:list={[index === 1 && 'is-featured-column', isEmphasis(value) && 'is-emphasis']}>
+                    {isIncluded(value) ? (
+                      <span class="pricing-comparison__included">
+                        <Icon name="check_circle" />
+                        <span class="pricing-section__sr-only">Included</span>
+                      </span>
+                    ) : (
+                      value.label
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

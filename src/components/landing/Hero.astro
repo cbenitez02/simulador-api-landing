@@ -1,65 +1,60 @@
 ---
-import Icon from '../Icon.astro';
-import MethodChip from '../MethodChip.astro';
-import { landingContent } from '../../content/landing';
+import { landingContent, type LandingLink } from '../../content/landing';
 
-const { eyebrow, title, lead, actions, preview } = landingContent.hero;
+const { title, description, actions, visual } = landingContent.hero;
+const primaryAction: LandingLink = actions.primary;
+const secondaryAction: LandingLink = actions.secondary;
+const metrics = [...visual.metrics];
 ---
 
-<section class="hero section" id="top">
-  <div class="shell hero__content">
-    <span class="eyebrow-pill">{eyebrow}</span>
-    <h1>{title}</h1>
-    <p class="hero__lead">{lead}</p>
+<section class="landing-hero landing-section" id="top">
+  <div class="shell landing-hero__grid">
+    <div class="landing-hero__copy">
+      <h1>
+        {title.prefix}
+        <span>{title.highlight}</span>
+        {title.suffix}
+      </h1>
+      <p>{description}</p>
 
-    <div class="hero__actions">
-      <a href={actions.primary.href} class="button button--primary button--large">
-        <Icon name={actions.primary.icon} class="hero__action-icon" />
-        {actions.primary.label}
-      </a>
-      <a href={actions.secondary.href} class="button button--secondary button--large">
-        {actions.secondary.label}
-      </a>
+      <div class="landing-hero__actions">
+        <a href={primaryAction.href} class="button button--primary button--large">
+          {primaryAction.label}
+        </a>
+        <a href={secondaryAction.href} class="button button--secondary button--large">
+          {secondaryAction.label}
+        </a>
+      </div>
     </div>
 
-    <div class="dashboard-frame" aria-label="Product preview">
-      <div class="dashboard-frame__toolbar">
-        <div class="window-dots" aria-hidden="true">
-          <span class="window-dot window-dot--error"></span>
-          <span class="window-dot window-dot--warning"></span>
-          <span class="window-dot window-dot--success"></span>
-        </div>
-        <span class="dashboard-url">{preview.url}</span>
+    <div class="landing-hero__visual" aria-label="Mock Prompt Editor">
+      <div class="landing-window-chrome" aria-hidden="true">
+        <span class="landing-window-dot landing-window-dot--error"></span>
+        <span class="landing-window-dot landing-window-dot--warning"></span>
+        <span class="landing-window-dot landing-window-dot--success"></span>
+        <span class="landing-hero__visual-label">{visual.label}</span>
       </div>
 
-      <div class="dashboard-frame__body">
-        <aside class="dashboard-sidebar" aria-label="Project navigation">
-          <div class="dashboard-sidebar__item dashboard-sidebar__item--active"></div>
-          <div class="dashboard-sidebar__item"></div>
-          <div class="dashboard-sidebar__item"></div>
-          <div class="dashboard-sidebar__item"></div>
-        </aside>
+      <div class="landing-hero__prompt">{visual.prompt}</div>
 
-        <div class="dashboard-panel glass-panel">
-          <div class="dashboard-panel__header">
-            <h2>{preview.title}</h2>
-            <span class="status-pill">
-              <span class="status-pill__dot"></span>
-              {preview.status}
-            </span>
-          </div>
+      <div class="landing-hero__visual-grid">
+        <div class="landing-hero__metrics">
+          {metrics.map((metric: (typeof metrics)[number]) => (
+            <div class="landing-metric-card">
+              <div class="landing-metric-card__row">
+                <span>{metric.label}</span>
+                <strong class={`landing-tone--${metric.tone}`}>{metric.value}</strong>
+              </div>
+              <div class="landing-progress" aria-hidden="true">
+                <span class={`landing-progress__fill landing-progress__fill--${metric.tone}`} style={`width: ${metric.fill};`}></span>
+              </div>
+            </div>
+          ))}
+        </div>
 
-          <div class="endpoint-list">
-            {preview.endpoints.map((endpoint) => (
-              <article class="endpoint-card">
-                <div class="endpoint-card__meta">
-                  <MethodChip method={endpoint.method} />
-                  <span class="endpoint-card__route">{endpoint.route}</span>
-                </div>
-                <span class="endpoint-card__latency">{endpoint.latency}</span>
-              </article>
-            ))}
-          </div>
+        <div class="landing-hero__response">
+          <span>{visual.responseTitle}</span>
+          <pre>{visual.responseLines.join('\n')}</pre>
         </div>
       </div>
     </div>

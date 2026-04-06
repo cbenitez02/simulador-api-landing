@@ -1,0 +1,47 @@
+---
+import Header from '../components/landing/Header.astro';
+import Footer from '../components/landing/Footer.astro';
+import PricingComparison from '../components/pricing/PricingComparison.astro';
+import PricingFaq from '../components/pricing/PricingFaq.astro';
+import PricingHero from '../components/pricing/PricingHero.astro';
+import PricingPlans from '../components/pricing/PricingPlans.astro';
+import PricingProof from '../components/pricing/PricingProof.astro';
+import { landingContent, type ShellLink } from '../content/landing';
+import { pricingContent } from '../content/pricing';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pricingHeaderPrimaryAction: ShellLink = { label: 'Get Started', href: '#comparison' };
+const pricingHeaderNavLinks: readonly ShellLink[] = landingContent.header.navLinks.map((link) => (
+  link.label === 'Platform'
+    ? { ...link, href: '/#simulation' }
+    : link
+));
+---
+
+<BaseLayout
+  title={pricingContent.seo.title}
+  description={pricingContent.seo.description}
+  siteName={pricingContent.brand}
+>
+  <div class="pricing-page">
+    <Header
+      pageClass="pricing-page"
+      activeNavLabel="Pricing"
+      brand={pricingContent.header.brand}
+      navLinks={pricingHeaderNavLinks}
+      primaryAction={pricingHeaderPrimaryAction}
+    />
+    <main id="main-content">
+      <PricingHero hero={pricingContent.hero} />
+      <PricingPlans plans={pricingContent.plans} />
+      <PricingProof cards={pricingContent.proofCards} />
+      <PricingComparison comparison={pricingContent.comparison} />
+      <PricingFaq items={pricingContent.faq} />
+    </main>
+    <Footer
+      pageClass="pricing-page"
+      brand={pricingContent.footer.brand}
+      copyright={pricingContent.footer.copyright}
+    />
+  </div>
+</BaseLayout>

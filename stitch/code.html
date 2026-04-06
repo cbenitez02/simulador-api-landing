@@ -3,347 +3,439 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ArchitectOS | API Mock AI</title>
+<title>ObsidianArchitect | API Mock AI</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                      "inverse-on-surface": "#313030",
-                      "on-error-container": "#ffdad6",
-                      "primary-fixed": "#6bff8f",
-                      "background": "#131313",
-                      "tertiary-container": "#d7a400",
-                      "primary-fixed-dim": "#4ae176",
-                      "on-primary-container": "#004b1e",
-                      "on-secondary": "#002e6a",
-                      "surface": "#131313",
-                      "on-surface": "#e5e2e1",
-                      "secondary-fixed-dim": "#adc6ff",
-                      "on-primary": "#003915",
-                      "primary": "#4be277",
-                      "on-tertiary": "#3f2e00",
-                      "surface-container": "#201f1f",
-                      "on-background": "#e5e2e1",
-                      "error": "#ffb4ab",
-                      "surface-container-lowest": "#0e0e0e",
-                      "on-tertiary-fixed": "#251a00",
-                      "surface-variant": "#353534",
-                      "on-primary-fixed": "#002109",
-                      "outline": "#869585",
-                      "on-tertiary-container": "#523d00",
-                      "on-primary-fixed-variant": "#005321",
-                      "surface-container-high": "#2a2a2a",
-                      "surface-bright": "#3a3939",
-                      "on-secondary-fixed-variant": "#004395",
-                      "secondary-container": "#0566d9",
-                      "tertiary-fixed": "#ffdf9a",
-                      "primary-container": "#22c55e",
-                      "on-secondary-fixed": "#001a42",
-                      "tertiary-fixed-dim": "#f7be1d",
-                      "surface-container-low": "#1c1b1b",
-                      "inverse-surface": "#e5e2e1",
-                      "inverse-primary": "#006e2f",
-                      "on-secondary-container": "#e6ecff",
-                      "surface-dim": "#131313",
-                      "surface-container-highest": "#353534",
-                      "secondary": "#adc6ff",
-                      "surface-tint": "#4ae176",
-                      "outline-variant": "#3d4a3d",
-                      "tertiary": "#f7bf1e",
-                      "secondary-fixed": "#d8e2ff",
-                      "on-error": "#690005",
-                      "error-container": "#93000a",
-                      "on-tertiary-fixed-variant": "#5a4300",
-                      "on-surface-variant": "#bccbb9"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.125rem",
-                      "lg": "0.25rem",
-                      "xl": "0.5rem",
-                      "full": "0.75rem"
-              },
-              "fontFamily": {
-                      "headline": ["Inter"],
-                      "body": ["Inter"],
-                      "label": ["Inter"]
-              }
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#adc6ff",
+                        "surface-dim": "#131313",
+                        "on-tertiary": "#3f2e00",
+                        "secondary": "#adc6ff",
+                        "on-background": "#e5e2e1",
+                        "inverse-on-surface": "#313030",
+                        "background": "#131313",
+                        "primary-fixed": "#6bff8f",
+                        "on-error": "#690005",
+                        "on-primary-container": "#004b1e",
+                        "inverse-primary": "#006e2f",
+                        "on-tertiary-fixed": "#251a00",
+                        "outline": "#869585",
+                        "tertiary-fixed-dim": "#f7be1d",
+                        "on-primary-fixed": "#002109",
+                        "on-surface-variant": "#bccbb9",
+                        "tertiary-container": "#d7a400",
+                        "surface-container-high": "#2a2a2a",
+                        "on-surface": "#e5e2e1",
+                        "surface-variant": "#353534",
+                        "surface": "#131313",
+                        "outline-variant": "#3d4a3d",
+                        "primary": "#4be277",
+                        "surface-container-highest": "#353534",
+                        "surface-container": "#201f1f",
+                        "secondary-fixed": "#d8e2ff",
+                        "primary-container": "#22c55e",
+                        "tertiary-fixed": "#ffdf9a",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-tint": "#4ae176",
+                        "error-container": "#93000a",
+                        "surface-container-low": "#1c1b1b",
+                        "primary-fixed-dim": "#4ae176",
+                        "on-secondary": "#002e6a",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "tertiary": "#f7bf1e",
+                        "secondary-container": "#0566d9",
+                        "on-tertiary-container": "#523d00",
+                        "surface-bright": "#3a3939",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-secondary-fixed": "#001a42",
+                        "on-secondary-container": "#e6ecff",
+                        "on-tertiary-fixed-variant": "#5a4300",
+                        "on-secondary-fixed-variant": "#004395",
+                        "on-primary": "#003915",
+                        "on-primary-fixed-variant": "#005321"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
             },
-          },
         }
-      </script>
+    </script>
 <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0e0e0e; color: #e5e2e1; }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        body { background-color: #0e0e0e; color: #e5e2e1; font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .glass-panel { background: rgba(53, 53, 52, 0.4); backdrop-filter: blur(12px); }
-        .method-get { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
-        .method-post { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
-        .method-put { background: rgba(247, 191, 30, 0.15); color: #f7bf1e; }
-        .method-delete { background: rgba(147, 0, 10, 0.2); color: #ffb4ab; }
-        .hero-gradient { background: radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.05) 0%, rgba(14, 14, 14, 0) 70%); }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .method-get { background-color: rgba(34, 197, 94, 0.15); color: #22c55e; }
+        .method-post { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+        .method-delete { background-color: rgba(147, 0, 10, 0.2); color: #ffb4ab; }
     </style>
 </head>
-<body class="selection:bg-primary-container selection:text-on-primary-container">
+<body class="selection:bg-primary/30">
 <!-- TopNavBar -->
-<nav class="fixed top-0 w-full z-50 flex justify-between items-center h-16 px-8 max-w-full bg-[#0e0e0e] border-none">
+<nav class="fixed top-0 w-full z-50 bg-[#0e0e0e]/80 backdrop-blur-md border-b border-[#3d4a3d]/20 shadow-[0px_10px_30px_rgba(0,0,0,0.5)]">
+<div class="max-w-7xl mx-auto px-6 flex justify-between items-center h-16">
 <div class="flex items-center gap-8">
-<span class="text-xl font-bold tracking-tighter text-[#e5e2e1] uppercase">ArchitectOS</span>
+<span class="text-xl font-bold tracking-tighter text-[#e5e2e1]">ObsidianArchitect</span>
 <div class="hidden md:flex gap-6">
-<a class="text-green-500 font-semibold border-b border-green-500 pb-1 font-['Inter'] text-sm tracking-tight" href="#">Features</a>
-<a class="text-[#bccbb9] hover:text-[#e5e2e1] transition-colors font-['Inter'] text-sm tracking-tight" href="#">Pricing</a>
-<a class="text-[#bccbb9] hover:text-[#e5e2e1] transition-colors font-['Inter'] text-sm tracking-tight" href="#">Docs</a>
+<a class="font-medium text-sm tracking-tight text-green-400 font-semibold transition-colors duration-200" href="#">Platform</a>
+<a class="font-medium text-sm tracking-tight text-[#bccbb9] hover:text-green-400 transition-colors duration-200" href="#">Documentation</a>
+<a class="font-medium text-sm tracking-tight text-[#bccbb9] hover:text-green-400 transition-colors duration-200" href="#">Changelog</a>
+<a class="font-medium text-sm tracking-tight text-[#bccbb9] hover:text-green-400 transition-colors duration-200" href="#">Pricing</a>
 </div>
 </div>
-<div class="flex items-center gap-4">
-<button class="text-[#bccbb9] hover:text-[#e5e2e1] transition-colors font-['Inter'] text-sm px-4 py-2">Login</button>
-<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary font-semibold px-5 py-2 rounded-lg text-sm transition-all duration-150 scale-95 active:opacity-80">Sign up</button>
+<button class="bg-primary-container text-on-primary-container px-4 py-2 text-sm font-semibold rounded active:scale-95 transition-transform">
+                Get Started
+            </button>
 </div>
 </nav>
-<main class="pt-16">
+<main class="pt-32 pb-20">
 <!-- Hero Section -->
-<section class="relative overflow-hidden hero-gradient min-h-[921px] flex flex-col items-center justify-center px-6 text-center border-b border-outline-variant/10">
-<div class="max-w-4xl space-y-6">
-<span class="label-sm bg-surface-container-high px-3 py-1 rounded text-primary border border-outline-variant/20 tracking-widest uppercase">Precision Engine v2.4</span>
-<h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-on-surface">Generate intelligent mock APIs in seconds</h1>
-<p class="text-lg md:text-xl text-on-surface-variant max-w-2xl mx-auto font-light">Stop waiting for the backend. Instantly provision high-performance, AI-driven endpoints that mimic production behavior with zero latency.</p>
-<div class="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-<button class="bg-primary-container text-on-primary-container px-8 py-4 rounded-lg font-bold flex items-center justify-center gap-2 transition-all hover:brightness-110 shadow-lg shadow-primary/20">
-<span class="material-symbols-outlined">rocket_launch</span> Get Started for Free
+<section class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+<div class="space-y-6">
+<h1 class="text-5xl md:text-7xl font-bold tracking-tighter leading-tight text-on-surface">
+                    Mock APIs with <span class="text-primary">real-world</span> behavior in seconds
+                </h1>
+<p class="text-lg text-on-surface-variant max-w-lg leading-relaxed">
+                    Generate endpoints from prompts or JSON. Simulate latency, errors, empty states and multiple scenarios — without a backend.
+                </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-3 font-semibold rounded shadow-lg active:scale-95 transition-transform">
+                        Create your first mock API
                     </button>
-<button class="bg-surface-container-low border border-outline-variant/20 text-on-surface px-8 py-4 rounded-lg font-bold transition-all hover:bg-surface-container-high">
-                        View Documentation
+<button class="border border-outline-variant/20 px-6 py-3 font-semibold rounded text-on-surface hover:bg-surface-container-low transition-colors">
+                        View demo
                     </button>
 </div>
 </div>
-<!-- Dashboard Mockup Frame -->
-<div class="mt-20 w-full max-w-6xl mx-auto px-4">
-<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-t-xl p-2 shadow-2xl">
-<div class="flex items-center gap-2 px-4 py-2 border-b border-outline-variant/10 mb-4">
-<div class="w-3 h-3 rounded-full bg-error/50"></div>
-<div class="w-3 h-3 rounded-full bg-tertiary/50"></div>
-<div class="w-3 h-3 rounded-full bg-primary/50"></div>
-<div class="ml-4 bg-surface-container text-on-surface-variant text-xs px-3 py-1 rounded border border-outline-variant/20 font-mono">https://api.mock.ai/v1/projects/architect-os</div>
-</div>
-<div class="grid grid-cols-12 gap-4 p-4 min-h-[400px]">
-<div class="col-span-3 space-y-2">
-<div class="h-10 bg-surface-container-high rounded-lg w-full"></div>
-<div class="h-10 bg-surface-container rounded-lg w-full opacity-50"></div>
-<div class="h-10 bg-surface-container rounded-lg w-full opacity-50"></div>
-<div class="h-10 bg-surface-container rounded-lg w-full opacity-50"></div>
-</div>
-<div class="col-span-9 bg-surface-container-low rounded-lg p-6 border border-outline-variant/10 relative overflow-hidden">
-<div class="flex justify-between items-center mb-8">
-<h3 class="text-xl font-bold tracking-tight">Active Endpoints</h3>
-<span class="bg-primary/20 text-primary px-3 py-1 rounded text-xs border border-primary/30 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span> 3 Endpoints Live</span>
+<!-- Hero Visual -->
+<div class="relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg blur-2xl opacity-50 group-hover:opacity-75 transition duration-1000"></div>
+<div class="relative bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-6 shadow-2xl overflow-hidden">
+<div class="flex items-center gap-2 mb-6 border-b border-outline-variant/10 pb-4">
+<span class="w-3 h-3 rounded-full bg-error"></span>
+<span class="w-3 h-3 rounded-full bg-tertiary"></span>
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="ml-4 text-xs font-mono text-on-surface-variant">Mock Prompt Editor</span>
 </div>
 <div class="space-y-4">
-<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded border border-outline-variant/10">
-<div class="flex items-center gap-4">
-<span class="method-get text-[10px] font-bold px-2 py-0.5 rounded tracking-tighter uppercase">GET</span>
-<span class="text-sm font-mono">/users/profile</span>
-</div>
-<span class="text-xs text-on-surface-variant">24ms delay</span>
-</div>
-<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded border border-outline-variant/10">
-<div class="flex items-center gap-4">
-<span class="method-post text-[10px] font-bold px-2 py-0.5 rounded tracking-tighter uppercase">POST</span>
-<span class="text-sm font-mono">/auth/register</span>
-</div>
-<span class="text-xs text-on-surface-variant">420ms delay (Simulated)</span>
-</div>
-<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded border border-outline-variant/10">
-<div class="flex items-center gap-4">
-<span class="method-delete text-[10px] font-bold px-2 py-0.5 rounded tracking-tighter uppercase">DELETE</span>
-<span class="text-sm font-mono">/posts/{id}</span>
-</div>
-<span class="text-xs text-on-surface-variant">Immediate</span>
-</div>
-</div>
-<img class="absolute -bottom-20 -right-20 w-80 opacity-10 mix-blend-screen" data-alt="Dark abstract technical background with glowing green code lines and futuristic interface elements" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAecV_QR9l-cthHrPQ250Swwd_POW3MCmtFmFOZ_s7KrzK2HElwAxBgOFEkNIxKrZxlIi2tJLV2A8dSuJkjE4j60SWISMcmyW7V0KWzB5h9Siw7Dy3o-JVOM1jm5mxPMzGC2MLZp_S0hJMA-ByOqM3cOILg59jDD2rAT3UtVPYNcfcjLQPSQMvEd3xNXjhxd-f_NthRxCzNcpDQ7cMxBx6fZs3JfgvTpjfakxH1oSNeSJS8m9W5TFnBhtrmHaR8gfhSciPHRtCKtw"/>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- Problem Section -->
-<section class="py-24 px-8 bg-surface-container-lowest">
-<div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-<div class="space-y-6">
-<h2 class="text-3xl md:text-4xl font-bold tracking-tight">The API Bottleneck is Over</h2>
-<p class="text-on-surface-variant text-lg leading-relaxed">Frontend teams shouldn't stall while backend schemas are being debated. Our AI engine infers data structures and provides realistic response payloads so you can start building before the first line of server code is even written.</p>
-<ul class="space-y-4">
-<li class="flex items-start gap-3">
-<span class="material-symbols-outlined text-error mt-1">close</span>
-<div>
-<span class="font-bold block">Static JSON Files</span>
-<p class="text-sm text-on-surface-variant">Hard to manage, zero logic, and impossible to scale.</p>
-</div>
-</li>
-<li class="flex items-start gap-3">
-<span class="material-symbols-outlined text-error mt-1">close</span>
-<div>
-<span class="font-bold block">Backend Delays</span>
-<p class="text-sm text-on-surface-variant">Waiting weeks for simple endpoint updates or schema changes.</p>
-</div>
-</li>
-</ul>
+<div class="bg-surface-container-low p-3 rounded font-mono text-sm border-l-2 border-primary">
+<span class="text-on-surface-variant">prompt:</span> <span class="text-on-surface">"GET /users with 20% errors and random 2s latency"</span>
 </div>
 <div class="grid grid-cols-2 gap-4">
-<div class="aspect-square bg-surface-container-low p-8 rounded-lg flex flex-col justify-center items-center text-center border border-outline-variant/10">
-<span class="text-4xl font-bold text-error mb-2">64%</span>
-<p class="text-xs uppercase tracking-widest text-on-surface-variant">Dev Time Wasted</p>
+<div class="bg-surface-container-high p-4 rounded space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Latency</span>
+<span class="text-xs font-mono text-primary">2,000ms</span>
 </div>
-<div class="aspect-square bg-surface-container-low p-8 rounded-lg flex flex-col justify-center items-center text-center border border-outline-variant/10">
-<span class="text-4xl font-bold text-primary mb-2">10x</span>
-<p class="text-xs uppercase tracking-widest text-on-surface-variant">Faster Iteration</p>
+<div class="h-1 bg-surface-container-low rounded-full relative">
+<div class="absolute inset-y-0 left-0 w-2/3 bg-primary rounded-full"></div>
 </div>
-<div class="col-span-2 bg-primary/10 border border-primary/20 p-6 rounded-lg">
-<p class="text-sm font-medium italic">"We reduced our feature delivery cycle by 3 weeks using ArchitectOS to mock our microservices."</p>
-<p class="text-xs mt-4 text-on-surface-variant">— Lead Architect, CloudCorp</p>
+<div class="flex justify-between items-center">
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Error Rate</span>
+<span class="text-xs font-mono text-error">20%</span>
+</div>
+<div class="h-1 bg-surface-container-low rounded-full relative">
+<div class="absolute inset-y-0 left-0 w-1/5 bg-error rounded-full"></div>
+</div>
+</div>
+<div class="bg-surface-container-high p-4 rounded font-mono text-[10px] leading-tight overflow-hidden">
+<div class="text-primary opacity-60 mb-2">// Response Preview</div>
+<div class="text-on-surface">{</div>
+<div class="pl-3 text-secondary">"id": 101,</div>
+<div class="pl-3 text-secondary">"name": "Jane Doe",</div>
+<div class="pl-3 text-secondary">"status": "active"</div>
+<div class="text-on-surface">}</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 </section>
-<!-- Solution (Bento Grid) -->
-<section class="py-24 px-8 bg-background">
-<div class="max-w-6xl mx-auto space-y-12">
-<div class="text-center">
-<h2 class="text-3xl font-bold tracking-tight">Built for Precision</h2>
+<!-- Simulation Section -->
+<section class="mt-40 bg-surface-container-low py-24 border-y border-outline-variant/10">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid lg:grid-cols-2 gap-16 items-center">
+<div class="space-y-6">
+<h2 class="text-3xl font-semibold tracking-tight text-on-surface">Simulate Real Backend Behavior</h2>
+<p class="text-on-surface-variant text-lg">
+                            Responses are dynamic and configurable, not static files. Build resiliency by testing how your app handles slow networks and server crashes.
+                        </p>
+<ul class="space-y-4 pt-4">
+<li class="flex items-center gap-3 text-on-surface">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+                                Probability-based response scenarios
+                            </li>
+<li class="flex items-center gap-3 text-on-surface">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+                                Dynamic data generation using AI
+                            </li>
+<li class="flex items-center gap-3 text-on-surface">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+                                Protocol-level simulation (Timeouts, CORS)
+                            </li>
+</ul>
 </div>
+<!-- Interactive Dashboard Layout -->
+<div class="bg-surface-container-lowest p-6 rounded border border-outline-variant/20 shadow-xl space-y-6">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="method-get px-2 py-0.5 text-[10px] font-bold rounded">GET</span>
+<span class="font-mono text-sm text-on-surface">/api/v1/users</span>
+</div>
+<span class="bg-primary/10 text-primary px-2 py-1 rounded text-[10px] font-mono">2s latency</span>
+</div>
+<div class="space-y-3">
+<!-- Scenario 1 -->
+<div class="flex items-center gap-4 bg-surface-container-high p-3 rounded group hover:bg-surface-container-highest transition-colors">
+<div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded border border-primary/20">
+<span class="text-xs font-bold text-primary">70%</span>
+</div>
+<div class="flex-1">
+<div class="text-sm font-semibold text-on-surface">Success Response</div>
+<div class="text-xs text-on-surface-variant">Returns User[] data with 200 OK</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="settings">settings</span>
+</div>
+<!-- Scenario 2 -->
+<div class="flex items-center gap-4 bg-surface-container-high p-3 rounded group hover:bg-surface-container-highest transition-colors">
+<div class="w-12 h-12 flex items-center justify-center bg-secondary/10 rounded border border-secondary/20">
+<span class="text-xs font-bold text-secondary">20%</span>
+</div>
+<div class="flex-1">
+<div class="text-sm font-semibold text-on-surface">Empty Array</div>
+<div class="text-xs text-on-surface-variant">Returns [] with 200 OK</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="settings">settings</span>
+</div>
+<!-- Scenario 3 -->
+<div class="flex items-center gap-4 bg-surface-container-high p-3 rounded group hover:bg-surface-container-highest transition-colors">
+<div class="w-12 h-12 flex items-center justify-center bg-error/10 rounded border border-error/20">
+<span class="text-xs font-bold text-error">10%</span>
+</div>
+<div class="flex-1">
+<div class="text-sm font-semibold text-on-surface">Internal Error</div>
+<div class="text-xs text-on-surface-variant">Returns Error 500 JSON</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="settings">settings</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- How it Works Section -->
+<section class="py-32 max-w-7xl mx-auto px-6 text-center">
+<h2 class="text-4xl font-bold tracking-tighter mb-16 text-on-surface">How It Works</h2>
+<div class="grid md:grid-cols-5 gap-8 relative">
+<!-- Step 1 -->
+<div class="space-y-4">
+<div class="w-10 h-10 bg-surface-container-high text-primary font-bold flex items-center justify-center rounded mx-auto border border-outline-variant/20">1</div>
+<h3 class="font-semibold text-sm text-on-surface">Create a project</h3>
+<p class="text-xs text-on-surface-variant leading-tight">Organize your endpoints by application or team.</p>
+</div>
+<!-- Step 2 -->
+<div class="space-y-4">
+<div class="w-10 h-10 bg-surface-container-high text-primary font-bold flex items-center justify-center rounded mx-auto border border-outline-variant/20">2</div>
+<h3 class="font-semibold text-sm text-on-surface">Describe endpoint</h3>
+<p class="text-xs text-on-surface-variant leading-tight">Use natural language prompts or paste JSON schemas.</p>
+</div>
+<!-- Step 3 -->
+<div class="space-y-4">
+<div class="w-10 h-10 bg-surface-container-high text-primary font-bold flex items-center justify-center rounded mx-auto border border-outline-variant/20">3</div>
+<h3 class="font-semibold text-sm text-on-surface">Generate mock</h3>
+<p class="text-xs text-on-surface-variant leading-tight">AI instantly architectures the route and response logic.</p>
+</div>
+<!-- Step 4 -->
+<div class="space-y-4">
+<div class="w-10 h-10 bg-surface-container-high text-primary font-bold flex items-center justify-center rounded mx-auto border border-outline-variant/20">4</div>
+<h3 class="font-semibold text-sm text-on-surface">Configure behavior</h3>
+<p class="text-xs text-on-surface-variant leading-tight">Fine-tune latency, error percentages, and headers.</p>
+</div>
+<!-- Step 5 -->
+<div class="space-y-4">
+<div class="w-10 h-10 bg-primary-container text-on-primary-container font-bold flex items-center justify-center rounded mx-auto">5</div>
+<h3 class="font-semibold text-sm text-on-surface">Use instantly</h3>
+<p class="text-xs text-on-surface-variant leading-tight">Copy your unique base URL and start building.</p>
+</div>
+</div>
+</section>
+<!-- Features Grid -->
+<section class="max-w-7xl mx-auto px-6 py-20">
 <div class="grid md:grid-cols-3 gap-6">
-<div class="md:col-span-2 bg-surface-container-low border border-outline-variant/10 rounded-lg p-8 relative overflow-hidden group">
-<div class="relative z-10 space-y-4">
-<span class="material-symbols-outlined text-secondary text-4xl">neurology</span>
-<h3 class="text-2xl font-bold">AI Schema Inference</h3>
-<p class="text-on-surface-variant max-w-md leading-relaxed">Paste a prompt or an example object. Our engine generates a fully typed, dynamic API with realistic relations and varied data payloads.</p>
+<!-- Feature 1 -->
+<div class="p-8 bg-surface-container-low border border-outline-variant/20 rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="auto_awesome">auto_awesome</span>
+<h3 class="text-lg font-semibold mb-2">AI Generation</h3>
+<p class="text-sm text-on-surface-variant">Build complex endpoints from simple text prompts. No manual JSON structure building required.</p>
 </div>
-<img class="absolute right-0 bottom-0 w-1/2 opacity-20 grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Cybernetic neural network representation with abstract glowing blue nodes on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZVcGKmhy1b5sM1jsUqTdbHDA9hAPx8Idgo_1t_YREp2LSZPqp4MlXWBPdi26yFyn-IHhsF2489ePZGqto8AJfpFMXm6ZjwhZEZvlkcPFJY50b_LgWyD1W5US9DusOr8W0HmHuKZTc3J7L2nPSgZGp5QbzuPOoAcnDy9KsYLDZeXDcatzCWEdfkx5yGJAl0yxBB0rsiLud5pqZifJWFFSHy9cEAjJMkW3FMsZLlHwxGs5QlzIEGh_Lf0Swjnmc4NS0FhTJQDuSxw"/>
+<!-- Feature 2 -->
+<div class="p-8 bg-surface-container-low border border-outline-variant/20 rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-error mb-4" data-icon="report_problem">report_problem</span>
+<h3 class="text-lg font-semibold mb-2">Error Simulation</h3>
+<p class="text-sm text-on-surface-variant">Simulate 404, 500, timeouts, and customized error bodies to test your app's resilience.</p>
 </div>
-<div class="bg-surface-container-low border border-outline-variant/10 rounded-lg p-8 space-y-4">
-<span class="material-symbols-outlined text-primary text-4xl">speed</span>
-<h3 class="text-xl font-bold">Zero-Latency Edge</h3>
-<p class="text-sm text-on-surface-variant leading-relaxed">Deployed on global edge nodes. 1ms response times to simulate ideal conditions, or add custom latency to test edge cases.</p>
+<!-- Feature 3 -->
+<div class="p-8 bg-surface-container-low border border-outline-variant/20 rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-secondary mb-4" data-icon="timer">timer</span>
+<h3 class="text-lg font-semibold mb-2">Latency Control</h3>
+<p class="text-sm text-on-surface-variant">Set fixed delays or randomized ranges to mimic real-world network conditions and edge connections.</p>
 </div>
-<div class="bg-surface-container-low border border-outline-variant/10 rounded-lg p-8 space-y-4">
-<span class="material-symbols-outlined text-tertiary text-4xl">lock_open</span>
-<h3 class="text-xl font-bold">Smart Auth</h3>
-<p class="text-sm text-on-surface-variant leading-relaxed">Simulate JWT, API Keys, or OAuth flow. Test how your app handles 401 Unauthorized and 403 Forbidden states instantly.</p>
+<!-- Feature 4 -->
+<div class="p-8 bg-surface-container-low border border-outline-variant/20 rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-tertiary mb-4" data-icon="account_tree">account_tree</span>
+<h3 class="text-lg font-semibold mb-2">Multi-Response Scenarios</h3>
+<p class="text-sm text-on-surface-variant">Define multiple states for a single endpoint and assign probability weights to each.</p>
 </div>
-<div class="md:col-span-2 bg-surface-container-low border border-outline-variant/10 rounded-lg p-8 flex flex-col md:flex-row gap-8 items-center">
-<div class="space-y-4 flex-1">
-<span class="material-symbols-outlined text-error text-4xl">warning</span>
-<h3 class="text-2xl font-bold">Chaos Mode</h3>
-<p class="text-on-surface-variant leading-relaxed">Inject random failures, 500 errors, and timeouts to ensure your application is resilient under pressure.</p>
+<!-- Feature 5 -->
+<div class="p-8 bg-surface-container-low border border-outline-variant/20 rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="code">code</span>
+<h3 class="text-lg font-semibold mb-2">Live JSON Editor</h3>
+<p class="text-sm text-on-surface-variant">Real-time editing with syntax highlighting and instant preview of generated data.</p>
 </div>
-<div class="w-full md:w-64 bg-surface-container-lowest rounded border border-error/20 p-4 font-mono text-[10px] text-error">
-                            { "error": "Internal Server Error", "code": 500, "trace_id": "8x-291-ck9" }
+<!-- Feature 6 -->
+<div class="p-8 bg-surface-container-low border border-outline-variant/20 rounded-lg hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-secondary mb-4" data-icon="link">link</span>
+<h3 class="text-lg font-semibold mb-2">Instant Base URL</h3>
+<p class="text-sm text-on-surface-variant">Production-ready URLs available the moment you save. No deployment cycles or restarts.</p>
+</div>
+</div>
+</section>
+<!-- Code / Demo Section -->
+<section class="py-24 max-w-7xl mx-auto px-6">
+<div class="grid lg:grid-cols-2 gap-px bg-outline-variant/20 border border-outline-variant/20 rounded-lg overflow-hidden">
+<div class="bg-surface-container-lowest p-8 space-y-6">
+<div class="flex justify-between items-center">
+<span class="text-xs font-mono text-on-surface-variant uppercase tracking-widest">Client Request</span>
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-outline-variant/50"></div>
+<div class="w-2 h-2 rounded-full bg-outline-variant/50"></div>
+<div class="w-2 h-2 rounded-full bg-outline-variant/50"></div>
+</div>
+</div>
+<div class="font-mono text-sm space-y-4">
+<div class="text-on-surface-variant">
+<span class="text-secondary">fetch</span>(<span class="text-primary">"https://api.mock.ai/v1/users"</span>)
+                        </div>
+<div class="pl-4 text-on-surface-variant">
+                            .then(res =&gt; res.json())
+                        </div>
+<div class="pl-4 text-on-surface-variant">
+                            .then(data =&gt; console.log(data));
                         </div>
 </div>
+<button class="flex items-center gap-2 text-xs font-bold text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="content_copy">content_copy</span>
+                        COPY CODE
+                    </button>
 </div>
+<div class="bg-surface-container-low p-8 space-y-6">
+<div class="flex justify-between items-center">
+<span class="text-xs font-mono text-on-surface-variant uppercase tracking-widest">Mock API Response</span>
+<span class="text-xs font-mono text-primary">200 OK (2.1s)</span>
 </div>
-</section>
-<!-- Interactive Code Demo -->
-<section class="py-24 px-8 bg-surface-container-lowest border-y border-outline-variant/10">
-<div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12">
-<div class="lg:w-1/2 space-y-8">
-<h2 class="text-4xl font-extrabold tracking-tight">Connect in 3 seconds.</h2>
-<p class="text-on-surface-variant text-lg">Switch your base URL and you're live. No SDK required, no heavy libraries, just pure REST architecture.</p>
-<div class="space-y-6">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded bg-primary/10 flex items-center justify-center text-primary font-bold">1</div>
-<p class="text-on-surface">Describe your entity (e.g. "User with 5 posts")</p>
-</div>
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded bg-primary/10 flex items-center justify-center text-primary font-bold">2</div>
-<p class="text-on-surface">Get your unique endpoint</p>
-</div>
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded bg-primary/10 flex items-center justify-center text-primary font-bold">3</div>
-<p class="text-on-surface">Integrate and start building</p>
-</div>
-</div>
-</div>
-<div class="lg:w-1/2 bg-[#000] rounded-xl border border-outline-variant/30 overflow-hidden shadow-2xl">
-<div class="flex bg-surface-container px-4 py-2 gap-4 border-b border-outline-variant/10">
-<span class="text-[10px] uppercase tracking-widest text-primary font-bold">JavaScript</span>
-<span class="text-[10px] uppercase tracking-widest text-on-surface-variant">Response JSON</span>
-</div>
-<div class="p-6 font-mono text-sm leading-relaxed overflow-x-auto">
-<pre class="text-[#869585]"><span class="text-secondary">const</span> response = <span class="text-secondary">await</span> fetch(<span class="text-primary">'https://api.mock.ai/v1/user/1'</span>);
-<span class="text-secondary">const</span> data = <span class="text-secondary">await</span> response.json();
-
-console.log(data.profile);
-
-<span class="text-on-surface-variant">// Expected Output:</span>
-{
-  <span class="text-primary">"id"</span>: <span class="text-tertiary">"usr_9281"</span>,
-  <span class="text-primary">"name"</span>: <span class="text-tertiary">"Alex Architect"</span>,
-  <span class="text-primary">"role"</span>: <span class="text-tertiary">"Senior Engineer"</span>,
-  <span class="text-primary">"tags"</span>: [<span class="text-tertiary">"frontend"</span>, <span class="text-tertiary">"obsidian"</span>]
+<div class="font-mono text-sm text-on-surface bg-surface-container-lowest p-4 rounded border border-outline-variant/10 max-h-[200px] overflow-auto">
+<pre>{
+  "status": "success",
+  "data": [
+    {
+      "id": "usr_01H2J",
+      "name": "Marcus Aurelius",
+      "email": "m.aurelius@stoic.dev",
+      "role": "Architect"
+    },
+    {
+      "id": "usr_01H2K",
+      "name": "Seneca the Younger",
+      "email": "seneca@cordoba.io",
+      "role": "Validator"
+    }
+  ]
 }</pre>
 </div>
 </div>
 </div>
 </section>
-<!-- Use Cases -->
-<section class="py-24 px-8">
-<div class="max-w-6xl mx-auto space-y-16">
-<div class="text-center max-w-2xl mx-auto">
-<h2 class="text-3xl font-bold mb-4">Master Your Workflow</h2>
-<p class="text-on-surface-variant">ArchitectOS adapts to your specific development phase.</p>
+<!-- Use Cases Section -->
+<section class="py-24 max-w-7xl mx-auto px-6">
+<h2 class="text-center text-3xl font-bold mb-16 text-on-surface">Accelerate every phase of development</h2>
+<div class="grid md:grid-cols-4 gap-4">
+<div class="p-6 bg-surface-container-lowest border border-outline-variant/10 rounded group hover:bg-surface-container-low transition-colors">
+<div class="w-10 h-10 flex items-center justify-center rounded bg-primary/10 text-primary mb-4">
+<span class="material-symbols-outlined" data-icon="potted_plant">potted_plant</span>
 </div>
-<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-<div class="p-6 bg-surface-container rounded-lg border-b-2 border-primary">
-<h4 class="font-bold mb-2">Prototyping</h4>
-<p class="text-xs text-on-surface-variant">Spin up a full backend in seconds to show stakeholders the real flow.</p>
+<h4 class="font-semibold text-on-surface mb-2">Early Frontend</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Start building your UI before the backend team has even finished the spec.</p>
 </div>
-<div class="p-6 bg-surface-container rounded-lg border-b-2 border-secondary">
-<h4 class="font-bold mb-2">Unit Testing</h4>
-<p class="text-xs text-on-surface-variant">Deterministic responses for CI/CD pipelines without external dependencies.</p>
+<div class="p-6 bg-surface-container-lowest border border-outline-variant/10 rounded group hover:bg-surface-container-low transition-colors">
+<div class="w-10 h-10 flex items-center justify-center rounded bg-error/10 text-error mb-4">
+<span class="material-symbols-outlined" data-icon="bug_report">bug_report</span>
 </div>
-<div class="p-6 bg-surface-container rounded-lg border-b-2 border-tertiary">
-<h4 class="font-bold mb-2">Mobile Dev</h4>
-<p class="text-xs text-on-surface-variant">Simulate offline states and slow 3G networks with precision.</p>
+<h4 class="font-semibold text-on-surface mb-2">Edge Case Testing</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Instantly force 503 errors or slow timeouts to test your error handling UI.</p>
 </div>
-<div class="p-6 bg-surface-container rounded-lg border-b-2 border-error">
-<h4 class="font-bold mb-2">Integration</h4>
-<p class="text-xs text-on-surface-variant">Test how your UI reacts to malformed payloads and missing keys.</p>
+<div class="p-6 bg-surface-container-lowest border border-outline-variant/10 rounded group hover:bg-surface-container-low transition-colors">
+<div class="w-10 h-10 flex items-center justify-center rounded bg-secondary/10 text-secondary mb-4">
+<span class="material-symbols-outlined" data-icon="presentation_chart_line">multiline_chart</span>
 </div>
+<h4 class="font-semibold text-on-surface mb-2">Stakeholder Demos</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Create high-fidelity demos that look and feel real with dynamic data flows.</p>
+</div>
+<div class="p-6 bg-surface-container-lowest border border-outline-variant/10 rounded group hover:bg-surface-container-low transition-colors">
+<div class="w-10 h-10 flex items-center justify-center rounded bg-tertiary/10 text-tertiary mb-4">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+</div>
+<h4 class="font-semibold text-on-surface mb-2">Contract Validation</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Prototype API contracts and validate them against real UI needs before locking.</p>
 </div>
 </div>
 </section>
 <!-- Final CTA -->
-<section class="py-32 px-8">
-<div class="max-w-4xl mx-auto bg-gradient-to-br from-surface-container-low to-surface-container-lowest border border-outline-variant/30 rounded-2xl p-12 text-center relative overflow-hidden">
+<section class="max-w-7xl mx-auto px-6 py-32 text-center">
+<div class="bg-gradient-to-br from-surface-container-low to-surface-container-lowest border border-outline-variant/20 p-16 rounded-lg relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px]"></div>
 <div class="relative z-10 space-y-8">
-<h2 class="text-4xl md:text-5xl font-black tracking-tighter">BUILD SMARTER. <br/><span class="text-primary">MOCK FASTER.</span></h2>
-<p class="text-on-surface-variant max-w-lg mx-auto">Join 15,000+ developers who have stopped waiting for the backend and started building the future.</p>
-<div class="flex flex-col sm:flex-row justify-center gap-4">
-<button class="bg-primary text-on-primary-container px-10 py-4 rounded-lg font-bold text-lg shadow-lg shadow-primary/20">Launch Console</button>
-<button class="bg-surface-container-high text-on-surface px-10 py-4 rounded-lg font-bold text-lg border border-outline-variant/20">Enterprise Demo</button>
+<h2 class="text-4xl md:text-5xl font-bold tracking-tighter text-on-surface">Start building without a backend today</h2>
+<p class="text-on-surface-variant max-w-xl mx-auto">
+                        Stop waiting for services to be ready. Define your own reality and focus on the user experience.
+                    </p>
+<button class="bg-primary text-on-primary px-8 py-4 font-bold rounded shadow-[0px_0px_20px_rgba(34,197,94,0.3)] active:scale-95 transition-all">
+                        Create your first mock API
+                    </button>
 </div>
-</div>
-<!-- Abstract BG Decor -->
-<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[120px]"></div>
-<div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 blur-[120px]"></div>
 </div>
 </section>
 </main>
 <!-- Footer -->
-<footer class="w-full flex flex-col md:flex-row justify-between items-center gap-6 px-12 py-12 bg-[#0e0e0e] border-t border-[#3d4a3d]/20">
-<div class="flex flex-col items-center md:items-start gap-2">
-<span class="font-['Inter'] text-xs uppercase tracking-widest text-[#bccbb9]">© 2024 Obsidian Architect. Precision Engine.</span>
+<footer class="w-full py-12 border-t border-[#3d4a3d]/20 bg-[#0e0e0e]">
+<div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex flex-col items-center md:items-start gap-4">
+<span class="text-lg font-bold text-[#e5e2e1]">Obsidian Architect</span>
+<span class="font-['Inter'] text-xs text-[#bccbb9]">© 2024 Obsidian Architect. All rights reserved.</span>
 </div>
 <div class="flex gap-8">
-<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#bccbb9] hover:text-blue-400 transition-colors" href="#">Terms</a>
-<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#bccbb9] hover:text-blue-400 transition-colors" href="#">Privacy</a>
-<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#bccbb9] hover:text-blue-400 transition-colors" href="#">Github</a>
-<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#bccbb9] hover:text-blue-400 transition-colors" href="#">Status</a>
+<a class="font-['Inter'] text-xs text-[#bccbb9] hover:text-white transition-colors" href="#">Docs</a>
+<a class="font-['Inter'] text-xs text-[#bccbb9] hover:text-white transition-colors" href="#">GitHub</a>
+<a class="font-['Inter'] text-xs text-[#bccbb9] hover:text-white transition-colors" href="#">Pricing</a>
+<a class="font-['Inter'] text-xs text-[#bccbb9] hover:text-white transition-colors" href="#">Contact</a>
+</div>
 </div>
 </footer>
 </body></html>

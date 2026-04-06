@@ -1,0 +1,43 @@
+---
+import Icon from '../Icon.astro';
+import type { PricingProofCard } from '../../content/pricing';
+
+interface Props {
+  cards: readonly PricingProofCard[];
+}
+
+const { cards } = Astro.props;
+const [featuredCard, ...supportingCards] = cards;
+---
+
+<section class="pricing-section pricing-proof" aria-labelledby="pricing-proof-title">
+  <div class="shell">
+    <h2 id="pricing-proof-title">Why Engineer-First Mocks?</h2>
+    <div class="pricing-proof__grid">
+      {featuredCard && (
+        <article class="pricing-proof-card pricing-proof-card--featured">
+          {featuredCard.eyebrow && <p class="pricing-eyebrow">{featuredCard.eyebrow}</p>}
+          <h3>{featuredCard.title}</h3>
+          <p>{featuredCard.body}</p>
+          {featuredCard.icon && <Icon name={featuredCard.icon} class="pricing-proof-card__icon" />}
+        </article>
+      )}
+
+      {supportingCards.length > 0 && (
+        <article class="pricing-proof-card pricing-proof-card--supporting">
+          <div class="pricing-proof-card__stack">
+            {supportingCards.map((card) => (
+              <div class:list={['pricing-proof-card__supporting-item', card.tone && `pricing-proof-card__supporting-item--${card.tone}`]}>
+                {card.icon && <Icon name={card.icon} class="pricing-proof-card__icon pricing-proof-card__icon--inline" />}
+                <div>
+                  <h3>{card.title}</h3>
+                  <p>{card.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </article>
+      )}
+    </div>
+  </div>
+</section>

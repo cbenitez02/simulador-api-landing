@@ -3,7 +3,13 @@
 ## Scope
 - Change: `astro-landing-page`
 - Goal: close remaining verify warnings without build/test-framework overreach
-- Reference artifacts: `stitch/code.html`, `stitch/screen.png`, `stitch/DESIGN.md`
+- Lifecycle policy / source of truth: `stitch/README.md`
+- Landing manual-reference artifacts: `stitch/code.html`, `stitch/screen.png`, `stitch/DESIGN.md`
+
+## Stitch authority
+- `stitch/README.md` is the canonical lifecycle policy for manual-reference authority and bundle status.
+- The landing bundle in `stitch/` is the active manual-reference source for `/` review in this document.
+- Stitch assets are human/manual references only; automated visual baselines live under `tests/visual/__screenshots__/`.
 
 ## Structural / visual pass
 - Reviewed current Astro section order against `stitch/code.html`: header → hero → problem → features → code demo → use cases → CTA → footer.

@@ -8,23 +8,44 @@ const HOST = process.env.SMOKE_HOST ?? '127.0.0.1';
 const PORT = Number(process.env.SMOKE_PORT ?? 4321);
 const BASE_URL = `http://${HOST}:${PORT}`;
 const TIMEOUT_MS = Number(process.env.SMOKE_TIMEOUT_MS ?? 30000);
-const HEADER_REQUIRED_SIGNALS = [
-  'API Mock AI',
-  'Platform',
-  'Documentation',
-  'Changelog',
-  'Pricing',
-  'Sign In',
-  'Get Started',
-  'href="#docs"',
-  'href="#pricing"',
-  'href="#login"',
-  'href="#signup"',
-  'aria-disabled="true"',
+const CANONICAL_BRAND = 'Obsidian Architect';
+const LEGACY_BRAND = 'ObsidianArchitect';
+const SECTION_ORDER = ['top', 'simulation', 'how-it-works', 'features', 'demo', 'use-cases', 'cta'];
+const LANDING_REQUIRED_SIGNALS = [
+  CANONICAL_BRAND,
+  'Mock APIs with',
+  'real-world',
+  'behavior in seconds',
+  'Mock Prompt Editor',
+  'Simulate Real Backend Behavior',
+  'Probability-based response scenarios',
+  'How It Works',
+  'Create a project',
+  'Use instantly',
+  'AI Generation',
+  'Instant Base URL',
+  'Client Request',
+  'Mock API Response',
+  'Accelerate every phase of development',
+  'Edge Case Testing',
+  'Start building without a backend today',
+  CANONICAL_BRAND,
 ];
-
-const HEADER_FORBIDDEN_SIGNALS = ['ArchitectOS', 'nav-link--active', 'href="#">Platform</a>', 'href="#">Changelog</a>'];
-const HEADER_PLACEHOLDER_LABELS = ['Platform', 'Changelog'];
+const PRICING_REQUIRED_SIGNALS = [
+  `${CANONICAL_BRAND} Pricing`,
+  'Precision-engineered pricing for resilient frontend teams',
+  'Monthly',
+  'Yearly',
+  'Save 20%',
+  'Starter',
+  'Pro',
+  'Team',
+  'Why Engineer-First Mocks?',
+  'Feature matrix',
+  'Developer FAQ',
+  `Do I need a backend before using ${CANONICAL_BRAND}?`,
+];
+const REMOVED_SHELL_LABELS = ['Documentation', 'Changelog', 'Docs', 'GitHub', 'Contact'];
 const MOBILE_HEADER_CSS_CHECKS = [
   {
     label: 'mobile breakpoint declaration',
@@ -33,22 +54,26 @@ const MOBILE_HEADER_CSS_CHECKS = [
   {
     label: 'mobile header shell stacking',
     pattern:
-      /@media\s*\(max-width:\s*720px\)\s*\{[\s\S]*?\.site-header__shell,\s*[\s\S]*?\.site-header__group,\s*[\s\S]*?flex-direction:\s*column;[\s\S]*?align-items:\s*stretch;/,
+      /@media\s*\(max-width:\s*720px\)\s*\{[\s\S]*?\.landing-page \.site-header__shell,\s*[\s\S]*?\.landing-page \.site-header__group[\s\S]*?flex-direction:\s*column;[\s\S]*?align-items:\s*stretch;/,
   },
   {
     label: 'mobile header nav wrapping',
     pattern:
-      /@media\s*\(max-width:\s*720px\)\s*\{[\s\S]*?\.site-header__nav,\s*[\s\S]*?flex-wrap:\s*wrap;[\s\S]*?justify-content:\s*center;/,
+      /@media\s*\(max-width:\s*720px\)\s*\{[\s\S]*?\.landing-page \.site-header__nav[\s\S]*?flex-wrap:\s*wrap;[\s\S]*?justify-content:\s*center;/,
   },
   {
     label: 'mobile header action group full width',
     pattern:
-      /@media\s*\(max-width:\s*720px\)\s*\{[\s\S]*?\.site-header__group--actions\s*\{[\s\S]*?width:\s*100%;/,
+      /@media\s*\(max-width:\s*720px\)\s*\{[\s\S]*?\.landing-page \.site-header__group--actions\s*\{[\s\S]*?width:\s*100%;/,
   },
   {
     label: 'mobile header actions full width',
     pattern:
-      /@media\s*\(max-width:\s*720px\)\s*\{[\s\S]*?\.site-header__action\s*\{[\s\S]*?width:\s*100%;/,
+      /@media\s*\(max-width:\s*720px\)\s*\{[\s\S]*?\.landing-page \.site-header__action\s*\{[\s\S]*?width:\s*100%;/,
+  },
+  {
+    label: 'landing page namespace',
+    pattern: /\.landing-page\s*\{/,
   },
 ];
 
@@ -115,6 +140,10 @@ async function fetchText(url) {
   return response.text();
 }
 
+function getHrefPattern(label, href) {
+  return new RegExp(`<a(?=[^>]*href="${escapeRegExp(href)}")[^>]*>\s*${escapeRegExp(label)}\s*<\/a>`);
+}
+
 function getLinkedStylesheetUrls(html) {
   return [...html.matchAll(/<link[^>]+rel=["'][^"']*stylesheet[^"']*["'][^>]+href=["']([^"']+)["'][^>]*>/gi)].map(
     ([, href]) => new URL(href, `${BASE_URL}/`).toString(),
@@ -125,10 +154,155 @@ function getInlineStyles(html) {
   return [...html.matchAll(/<style(?:\s[^>]*)?>([\s\S]*?)<\/style>/gi)].map(([, css]) => css);
 }
 
-function getHeaderPlaceholderPattern(label) {
-  return new RegExp(
-    `<span(?=[^>]*site-header__link--placeholder)(?=[^>]*aria-disabled="true")(?=[^>]*title="[^"]+")[^>]*>\\s*${label}\\s*<\\/span>`,
+function getTitleText(html) {
+  const match = html.match(/<title>([\s\S]*?)<\/title>/i);
+
+  if (!match) {
+    throw new Error('Expected page HTML to include a <title> element.');
+  }
+
+  return decodeHtmlEntities(match[1].trim());
+}
+
+function getMetaContent(html, attribute, value) {
+  const metaTagPattern = new RegExp(
+    `<meta(?=[^>]*${attribute}=["']${escapeRegExp(value)}["'])[^>]*content=["']([^"']*)["'][^>]*>`,
+    'i',
   );
+  const match = html.match(metaTagPattern);
+
+  return match ? decodeHtmlEntities(match[1].trim()) : undefined;
+}
+
+function getJsonLdBlocks(html) {
+  return [...html.matchAll(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)].map(
+    ([, content]) => content.trim(),
+  );
+}
+
+function decodeHtmlEntities(value) {
+  return value
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+}
+
+function collectJsonLdNames(input, names = []) {
+  if (Array.isArray(input)) {
+    input.forEach((item) => collectJsonLdNames(item, names));
+    return names;
+  }
+
+  if (input && typeof input === 'object') {
+    Object.entries(input).forEach(([key, value]) => {
+      if (key === 'name' && typeof value === 'string') {
+        names.push(value);
+        return;
+      }
+
+      collectJsonLdNames(value, names);
+    });
+  }
+
+  return names;
+}
+
+function assertMetadataBranding(html, routeLabel) {
+  const title = getTitleText(html);
+  const metadataChecks = [
+    { label: 'page title', value: title, required: true },
+    { label: 'Open Graph title', value: getMetaContent(html, 'property', 'og:title') },
+    { label: 'Open Graph site name', value: getMetaContent(html, 'property', 'og:site_name') },
+    { label: 'Twitter title', value: getMetaContent(html, 'name', 'twitter:title') },
+  ];
+
+  metadataChecks.forEach(({ label, value, required = false }) => {
+    if (!value) {
+      if (required) {
+        throw new Error(`Expected ${routeLabel} ${label} metadata to be present.`);
+      }
+
+      return;
+    }
+
+    if (!value.includes(CANONICAL_BRAND)) {
+      throw new Error(`Expected ${routeLabel} ${label} metadata to include "${CANONICAL_BRAND}".`);
+    }
+
+    if (value.includes(LEGACY_BRAND)) {
+      throw new Error(`Expected ${routeLabel} ${label} metadata to reject legacy brand "${LEGACY_BRAND}".`);
+    }
+  });
+
+  const jsonLdNames = getJsonLdBlocks(html)
+    .flatMap((block) => {
+      try {
+        return collectJsonLdNames(JSON.parse(block));
+      } catch (error) {
+        throw new Error(`Could not parse ${routeLabel} JSON-LD metadata: ${error.message}`);
+      }
+    })
+    .filter((value) => typeof value === 'string');
+
+  if (jsonLdNames.length === 0) {
+    throw new Error(`Expected ${routeLabel} to expose a JSON-LD branding signal.`);
+  }
+
+  if (!jsonLdNames.some((value) => value.includes(CANONICAL_BRAND))) {
+    throw new Error(`Expected ${routeLabel} JSON-LD metadata to include "${CANONICAL_BRAND}".`);
+  }
+
+  if (jsonLdNames.some((value) => value.includes(LEGACY_BRAND))) {
+    throw new Error(`Expected ${routeLabel} JSON-LD metadata to reject legacy brand "${LEGACY_BRAND}".`);
+  }
+}
+
+function assertLabelAbsent(html, label, routeLabel) {
+  const escapedLabel = escapeRegExp(label);
+
+  if (new RegExp(`>\\s*${escapedLabel}\\s*<`).test(html)) {
+    throw new Error(`Expected ${routeLabel} to keep removed shell label "${label}" absent.`);
+  }
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function getSectionFragment(html, id) {
+  const match = html.match(new RegExp(`<section[^>]*id="${escapeRegExp(id)}"[^>]*>[\\s\\S]*?<\\/section>`));
+
+  if (!match) {
+    throw new Error(`Could not locate section fragment for #${id}.`);
+  }
+
+  return match[0];
+}
+
+function countMatches(content, pattern) {
+  return [...content.matchAll(pattern)].length;
+}
+
+function assertIncludes(content, expected, label) {
+  if (!content.includes(expected)) {
+    throw new Error(`Expected ${label} to include "${expected}".`);
+  }
+}
+
+function assertCount(content, pattern, expected, label) {
+  const actual = countMatches(content, pattern);
+
+  if (actual !== expected) {
+    throw new Error(`Expected ${label} count to be ${expected} but received ${actual}.`);
+  }
+}
+
+function assertPattern(content, pattern, label) {
+  if (!pattern.test(content)) {
+    throw new Error(`Expected ${label} to match ${pattern}.`);
+  }
 }
 
 async function stopServer() {
@@ -161,45 +335,80 @@ try {
     throw new Error(`Expected text/html but received "${contentType}".`);
   }
 
-  const headerMatch = html.match(/<header[^>]*class="site-header"[^>]*>[\s\S]*?<\/header>/);
-
-  if (!headerMatch) {
-    throw new Error('Could not locate the site header fragment in the rendered HTML.');
-  }
-
-  const headerHtml = headerMatch[0];
-
-  const missingSignals = HEADER_REQUIRED_SIGNALS.filter((signal) => !headerHtml.includes(signal));
+  const missingSignals = LANDING_REQUIRED_SIGNALS.filter((signal) => !html.includes(signal));
 
   if (missingSignals.length > 0) {
-    throw new Error(`Header is missing expected signals: ${missingSignals.join(', ')}`);
+    throw new Error(`Landing is missing expected visible signals: ${missingSignals.join(', ')}`);
   }
 
-  const forbiddenSignals = HEADER_FORBIDDEN_SIGNALS.filter((signal) => headerHtml.includes(signal));
+  assertMetadataBranding(html, 'landing');
 
-  if (forbiddenSignals.length > 0) {
-    throw new Error(`Header still contains legacy or deceptive signals: ${forbiddenSignals.join(', ')}`);
+  REMOVED_SHELL_LABELS.forEach((label) => assertLabelAbsent(html, label, 'landing'));
+
+  if (html.includes('href="#"')) {
+    throw new Error('Landing still exposes deceptive href="#" placeholders.');
   }
 
-  const missingPlaceholders = HEADER_PLACEHOLDER_LABELS.filter(
-    (label) => !getHeaderPlaceholderPattern(label).test(headerHtml),
+  if (html.includes(LEGACY_BRAND)) {
+    throw new Error(`Landing still exposes the non-canonical ${LEGACY_BRAND} branding variant.`);
+  }
+
+  if (!getHrefPattern('Pricing', '/pricing').test(html)) {
+    throw new Error('Landing is missing a real Pricing link to /pricing.');
+  }
+
+  const mainMatch = html.match(/<main[^>]*id="main-content"[^>]*>[\s\S]*?<\/main>/);
+
+  if (!mainMatch) {
+    throw new Error('Could not locate the landing main content fragment.');
+  }
+
+  const sectionPositions = SECTION_ORDER.map((id) => mainMatch[0].indexOf(`id="${id}"`));
+
+  if (sectionPositions.some((position) => position === -1)) {
+    throw new Error(`Landing is missing one or more required sections: ${SECTION_ORDER.join(', ')}`);
+  }
+
+  for (let index = 1; index < sectionPositions.length; index += 1) {
+    if (sectionPositions[index] <= sectionPositions[index - 1]) {
+      throw new Error(`Landing sections are out of order. Expected: ${SECTION_ORDER.join(' -> ')}`);
+    }
+  }
+
+  const simulationSection = getSectionFragment(mainMatch[0], 'simulation');
+  const howItWorksSection = getSectionFragment(mainMatch[0], 'how-it-works');
+  const featuresSection = getSectionFragment(mainMatch[0], 'features');
+  const demoSection = getSectionFragment(mainMatch[0], 'demo');
+  const useCasesSection = getSectionFragment(mainMatch[0], 'use-cases');
+
+  assertCount(simulationSection, /class="landing-scenario-card"/g, 3, 'simulation scenario cards');
+  assertIncludes(simulationSection, '/api/v1/users', 'simulation section');
+  assertIncludes(simulationSection, '2s latency', 'simulation section');
+  ['70%', 'Success Response', '20%', 'Empty Array', '10%', 'Internal Error'].forEach((signal) =>
+    assertIncludes(simulationSection, signal, 'simulation section'),
   );
 
-  if (missingPlaceholders.length > 0) {
-    throw new Error(
-      `Header placeholders are missing honest disabled rendering for: ${missingPlaceholders.join(', ')}`,
-    );
-  }
-
-  const fakePlaceholderAnchors = HEADER_PLACEHOLDER_LABELS.filter((label) =>
-    new RegExp(`<a[^>]*href="#"[^>]*>\\s*${label}\\s*<\\/a>`).test(headerHtml),
+  assertCount(howItWorksSection, /class="landing-step-card"/g, 5, 'How It Works steps');
+  ['1', '2', '3', '4', '5', 'Create a project', 'Use instantly'].forEach((signal) =>
+    assertIncludes(howItWorksSection, signal, 'How It Works section'),
   );
 
-  if (fakePlaceholderAnchors.length > 0) {
-    throw new Error(
-      `Header still exposes fake placeholder anchors for: ${fakePlaceholderAnchors.join(', ')}`,
-    );
-  }
+  assertCount(featuresSection, /class="landing-feature-card"/g, 6, 'feature cards');
+  ['AI Generation', 'Error Simulation', 'Latency Control', 'Multi-Response Scenarios', 'Live JSON Editor', 'Instant Base URL'].forEach((signal) =>
+    assertIncludes(featuresSection, signal, 'features section'),
+  );
+
+  assertIncludes(demoSection, 'Client Request', 'demo section');
+  assertIncludes(demoSection, 'Mock API Response', 'demo section');
+  assertIncludes(demoSection, '200 OK', 'demo section');
+  assertIncludes(demoSection, '(2.1s)', 'demo section');
+  assertPattern(demoSection, /status[\s\S]*success/, 'demo section response payload');
+  assertIncludes(demoSection, 'Marcus Aurelius', 'demo section');
+
+  assertCount(useCasesSection, /class="landing-use-case-card"/g, 4, 'use case cards');
+  ['Early Frontend', 'Edge Case Testing', 'Stakeholder Demos', 'Contract Validation'].forEach((signal) =>
+    assertIncludes(useCasesSection, signal, 'use cases section'),
+  );
 
   if (!/<meta[^>]+name="viewport"[^>]+content="[^"]*width=device-width[^"]*initial-scale=1(?:\.0)?[^"]*"/i.test(html)) {
     throw new Error('Landing is missing the responsive viewport meta required for mobile header evidence.');
@@ -221,6 +430,35 @@ try {
     throw new Error(
       `Rendered CSS is missing expected mobile header evidence: ${missingMobileCssChecks.join(', ')}`,
     );
+  }
+
+  const pricingHtml = await fetchText(`${BASE_URL}/pricing`);
+  const pricingMissingSignals = PRICING_REQUIRED_SIGNALS.filter((signal) => !pricingHtml.includes(signal));
+
+  if (pricingMissingSignals.length > 0) {
+    throw new Error(`Pricing page is missing expected visible signals: ${pricingMissingSignals.join(', ')}`);
+  }
+
+  assertMetadataBranding(pricingHtml, 'pricing');
+
+  REMOVED_SHELL_LABELS.forEach((label) => assertLabelAbsent(pricingHtml, label, 'pricing'));
+
+  if (!getHrefPattern('Pricing', '/pricing').test(pricingHtml)) {
+    throw new Error('Pricing page is missing a real Pricing link to /pricing.');
+  }
+
+  if (!pricingHtml.includes('site-header__link--active') || !pricingHtml.includes('aria-current="page"')) {
+    throw new Error('Pricing page header does not expose Pricing as the active destination.');
+  }
+
+  assertCount(pricingHtml, /class="pricing-plan-card(?:\s|--|")/g, 3, 'pricing plan cards');
+  assertCount(pricingHtml, /class="pricing-proof-card(?:\s|--|")/g, 2, 'pricing proof blocks');
+  ['Why Engineer-First Mocks?', 'Feature matrix', 'Developer FAQ'].forEach((signal) =>
+    assertIncludes(pricingHtml, signal, 'pricing page'),
+  );
+
+  if (pricingHtml.includes(LEGACY_BRAND)) {
+    throw new Error(`Pricing page still exposes the non-canonical ${LEGACY_BRAND} branding variant.`);
   }
 
   console.log(`Smoke test passed for ${BASE_URL}/`);

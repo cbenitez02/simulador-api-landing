@@ -1,0 +1,23 @@
+---
+import type { PricingFaqItem } from '../../content/pricing';
+
+interface Props {
+  items: readonly PricingFaqItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="pricing-section pricing-faq" id="faq" aria-labelledby="faq-title">
+  <div class="shell pricing-faq__content">
+    <h2 id="faq-title">Developer FAQ</h2>
+    <div class="pricing-faq__grid">
+      {items.map((item) => (
+        <article class="pricing-faq__item">
+          <h3>{item.question}</h3>
+          <p>{item.answer}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

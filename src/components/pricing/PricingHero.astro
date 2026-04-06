@@ -1,0 +1,30 @@
+---
+import type { pricingContent } from '../../content/pricing';
+
+interface Props {
+  hero: typeof pricingContent.hero;
+}
+
+const { hero } = Astro.props;
+---
+
+<section class="pricing-section pricing-hero" id="top">
+  <div class="shell pricing-hero__content">
+    <p class="pricing-eyebrow">{hero.eyebrow}</p>
+    <h1>{hero.title}</h1>
+    <p class="pricing-hero__description">{hero.description}</p>
+
+    <div class="pricing-billing-toggle" aria-label="Billing cadence preview">
+      <span>{hero.billingToggle.monthlyLabel}</span>
+      <span class="pricing-billing-toggle__track" aria-hidden="true">
+        <span class="pricing-billing-toggle__thumb"></span>
+      </span>
+      <span class="pricing-billing-toggle__yearly">
+        {hero.billingToggle.yearlyLabel}
+        <strong>{hero.billingToggle.savingsBadge}</strong>
+      </span>
+    </div>
+
+    <p class="pricing-hero__disclaimer">{hero.disclaimer}</p>
+  </div>
+</section>
