@@ -9,6 +9,11 @@ type RenderedRoute = {
   document: Document;
 };
 
+type RenderAstroOptions = {
+  pathname: string;
+  props?: Record<string, unknown>;
+};
+
 let containerPromise: Promise<AstroContainer> | undefined;
 
 function getContainer() {
@@ -16,11 +21,15 @@ function getContainer() {
   return containerPromise;
 }
 
-export async function renderRoute(page: AstroComponentFactory, pathname: string): Promise<RenderedRoute> {
+export async function renderAstro(
+  page: AstroComponentFactory,
+  { pathname, props }: RenderAstroOptions,
+): Promise<RenderedRoute> {
   const container = await getContainer();
   const request = new Request(new URL(pathname, TEST_ORIGIN));
   const html = await container.renderToString(page, {
     partial: false,
+    props,
     request,
   });
   const { document } = parseHTML(html);
@@ -29,4 +38,8 @@ export async function renderRoute(page: AstroComponentFactory, pathname: string)
     html,
     document,
   };
+}
+
+export async function renderRoute(page: AstroComponentFactory, pathname: string): Promise<RenderedRoute> {
+  return renderAstro(page, { pathname });
 }

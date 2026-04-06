@@ -1,32 +1,22 @@
 ---
-import { landingContent } from '../../content/landing';
+import { landingContent, type ShellLink } from '../../content/landing';
 
 interface Props {
   pageClass?: 'landing-page' | 'pricing-page';
   brand?: string;
   copyright?: string;
+  links?: readonly ShellLink[];
 }
 
 const {
   pageClass = 'landing-page',
   brand,
   copyright = landingContent.footer.copyright,
+  links: linksOverride,
 } = Astro.props;
 
-type LinkLike = { label: string; href: string } | { label: string; placeholderReason: string };
-
-const footerContent = landingContent.footer as {
-  brand?: string;
-  copyright: string;
-  links: readonly LinkLike[];
-};
-
-const resolvedBrand = brand ?? footerContent.brand;
-const links = [...footerContent.links] as LinkLike[];
-
-function hasHref(link: LinkLike): link is Extract<LinkLike, { href: string }> {
-  return 'href' in link;
-}
+const resolvedBrand = brand ?? landingContent.footer.brand;
+const links = linksOverride ?? landingContent.footer.links;
 ---
 
 <footer class={`site-footer ${pageClass}__site-footer`.trim()}>
@@ -36,15 +26,7 @@ function hasHref(link: LinkLike): link is Extract<LinkLike, { href: string }> {
       <span>{copyright}</span>
     </div>
     <nav aria-label="Footer">
-      {links.map((link) => (
-        hasHref(link) ? (
-          <a href={link.href}>{link.label}</a>
-        ) : (
-          <span class="site-footer__placeholder" title={link.placeholderReason} aria-disabled="true">
-            {link.label}
-          </span>
-        )
-      ))}
+      {links.map((link) => <a href={link.href}>{link.label}</a>)}
     </nav>
   </div>
 </footer>

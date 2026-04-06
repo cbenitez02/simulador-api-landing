@@ -1,12 +1,12 @@
 ---
-import { landingContent } from '../../content/landing';
+import { landingContent, type ShellLink } from '../../content/landing';
 
 interface Props {
   activeNavLabel?: string;
   pageClass?: 'landing-page' | 'pricing-page';
   brand?: string;
-  primaryAction?: { label: string; href: string };
-  navLinks?: readonly LinkLike[];
+   primaryAction?: ShellLink;
+   navLinks?: readonly ShellLink[];
 }
 
 const {
@@ -17,24 +17,8 @@ const {
   navLinks,
 } = Astro.props;
 
-type LinkLike = { label: string; href: string } | { label: string; placeholderReason: string };
-
-const headerContent = landingContent.header as {
-  brand: string;
-  navLinks: readonly LinkLike[];
-  primaryAction?: { label: string; href: string };
-  actions?: { primary?: { label: string; href: string } };
-};
-
-const resolvedNavLinks = [...(navLinks ?? headerContent.navLinks)] as LinkLike[];
-const resolvedPrimaryAction = primaryAction
-  ?? headerContent.primaryAction
-  ?? headerContent.actions?.primary
-  ?? { label: 'Get Started', href: '#cta' };
-
-function hasHref(link: LinkLike): link is Extract<LinkLike, { href: string }> {
-  return 'href' in link;
-}
+const resolvedNavLinks = navLinks ?? landingContent.header.navLinks;
+const resolvedPrimaryAction = primaryAction ?? landingContent.header.primaryAction;
 ---
 
 <header class={`site-header ${pageClass}__site-header`.trim()}>
@@ -43,23 +27,13 @@ function hasHref(link: LinkLike): link is Extract<LinkLike, { href: string }> {
       <a href="/" class="site-header__brand">{brand}</a>
       <div class="site-header__nav" aria-label="Sections">
         {resolvedNavLinks.map((link) => (
-          hasHref(link) ? (
-            <a
-              href={link.href}
-              class:list={['site-header__link', activeNavLabel === link.label && 'site-header__link--active']}
-              aria-current={activeNavLabel === link.label ? 'page' : undefined}
-            >
-              {link.label}
-            </a>
-          ) : (
-            <span
-              class="site-header__link site-header__link--placeholder"
-              title={link.placeholderReason}
-              aria-disabled="true"
-            >
-              {link.label}
-            </span>
-          )
+          <a
+            href={link.href}
+            class:list={['site-header__link', activeNavLabel === link.label && 'site-header__link--active']}
+            aria-current={activeNavLabel === link.label ? 'page' : undefined}
+          >
+            {link.label}
+          </a>
         ))}
       </div>
     </div>

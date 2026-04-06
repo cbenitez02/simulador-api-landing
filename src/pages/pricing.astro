@@ -6,13 +6,13 @@ import PricingFaq from '../components/pricing/PricingFaq.astro';
 import PricingHero from '../components/pricing/PricingHero.astro';
 import PricingPlans from '../components/pricing/PricingPlans.astro';
 import PricingProof from '../components/pricing/PricingProof.astro';
-import { landingContent } from '../content/landing';
+import { landingContent, type ShellLink } from '../content/landing';
 import { pricingContent } from '../content/pricing';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const pricingHeaderPrimaryAction = { label: 'Get Started', href: '#comparison' };
-const pricingHeaderNavLinks = landingContent.header.navLinks.map((link) => (
-  'href' in link && link.label === 'Platform'
+const pricingHeaderPrimaryAction: ShellLink = { label: 'Get Started', href: '#comparison' };
+const pricingHeaderNavLinks: readonly ShellLink[] = landingContent.header.navLinks.map((link) => (
+  link.label === 'Platform'
     ? { ...link, href: '/#simulation' }
     : link
 ));
