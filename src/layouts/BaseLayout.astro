@@ -5,14 +5,14 @@ import { landingContent } from '../content/landing';
 interface Props {
   title?: string;
   description?: string;
+  siteName?: string;
 }
 
 const {
   title = landingContent.seo.title,
   description = landingContent.seo.description,
+  siteName = landingContent.header.brand,
 } = Astro.props;
-
-const siteName = landingContent.header.brand;
 const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
 const structuredData = {
   '@context': 'https://schema.org',

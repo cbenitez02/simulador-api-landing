@@ -1,19 +1,49 @@
 ---
-import { landingContent, type LandingLink } from '../../content/landing';
+import { landingContent } from '../../content/landing';
 
-const { brand } = landingContent.header;
-const navLinks: LandingLink[] = [...landingContent.header.navLinks];
-const primaryAction: LandingLink = landingContent.header.primaryAction;
+interface Props {
+  activeNavLabel?: string;
+  pageClass?: 'landing-page' | 'pricing-page';
+  brand?: string;
+}
+
+const {
+  activeNavLabel,
+  pageClass = 'landing-page',
+  brand = landingContent.header.brand,
+} = Astro.props;
+
+type LinkLike = { label: string; href: string } | { label: string; placeholderReason: string };
+
+const headerContent = landingContent.header as {
+  brand: string;
+  navLinks: readonly LinkLike[];
+  primaryAction?: { label: string; href: string };
+  actions?: { primary?: { label: string; href: string } };
+};
+
+const navLinks = [...headerContent.navLinks] as LinkLike[];
+const primaryAction = headerContent.primaryAction ?? headerContent.actions?.primary ?? { label: 'Get Started', href: '#cta' };
+
+function hasHref(link: LinkLike): link is Extract<LinkLike, { href: string }> {
+  return 'href' in link;
+}
 ---
 
-<header class="site-header">
+<header class={`site-header ${pageClass}__site-header`.trim()}>
   <nav class="shell site-header__shell" aria-label="Primary">
     <div class="site-header__group site-header__group--brand">
       <a href="/" class="site-header__brand">{brand}</a>
       <div class="site-header__nav" aria-label="Sections">
         {navLinks.map((link) => (
-          'href' in link ? (
-            <a href={link.href} class="site-header__link">{link.label}</a>
+          hasHref(link) ? (
+            <a
+              href={link.href}
+              class:list={['site-header__link', activeNavLabel === link.label && 'site-header__link--active']}
+              aria-current={activeNavLabel === link.label ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
           ) : (
             <span
               class="site-header__link site-header__link--placeholder"

@@ -37,7 +37,7 @@ export const landingContent = {
       },
       {
         label: 'Pricing',
-        placeholderReason: 'Pricing is intentionally out of scope until a real plan page exists.',
+        href: '/pricing',
       },
     ] satisfies LandingLink[],
     primaryAction: { label: 'Get Started', href: '#cta' } satisfies LandingLink,
@@ -248,7 +248,7 @@ export const landingContent = {
       },
       {
         label: 'Pricing',
-        placeholderReason: 'Pricing stays disabled until a real pricing destination exists.',
+        href: '/pricing',
       },
       {
         label: 'Contact',

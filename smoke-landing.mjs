@@ -9,7 +9,7 @@ const PORT = Number(process.env.SMOKE_PORT ?? 4321);
 const BASE_URL = `http://${HOST}:${PORT}`;
 const TIMEOUT_MS = Number(process.env.SMOKE_TIMEOUT_MS ?? 30000);
 const SECTION_ORDER = ['top', 'simulation', 'how-it-works', 'features', 'demo', 'use-cases', 'cta'];
-const PAGE_REQUIRED_SIGNALS = [
+const LANDING_REQUIRED_SIGNALS = [
   'ObsidianArchitect',
   'Mock APIs with',
   'real-world',
@@ -32,7 +32,22 @@ const PAGE_REQUIRED_SIGNALS = [
   'GitHub',
   'Contact',
 ];
-const DISABLED_PLACEHOLDER_LABELS = ['Documentation', 'Changelog', 'Pricing', 'Docs', 'GitHub', 'Contact'];
+const PRICING_REQUIRED_SIGNALS = [
+  'Obsidian Architect Pricing',
+  'Precision-engineered pricing for resilient frontend teams',
+  'Monthly',
+  'Yearly',
+  'Save 20%',
+  'Starter',
+  'Pro',
+  'Team',
+  'Why Engineer-First Mocks?',
+  'Feature matrix',
+  'Developer FAQ',
+  'Do I need a backend before using Obsidian Architect?',
+];
+const LANDING_DISABLED_PLACEHOLDER_LABELS = ['Documentation', 'Changelog', 'Docs', 'GitHub', 'Contact'];
+const PRICING_DISABLED_PLACEHOLDER_LABELS = ['Documentation', 'Changelog', 'Docs', 'GitHub', 'Contact'];
 const MOBILE_HEADER_CSS_CHECKS = [
   {
     label: 'mobile breakpoint declaration',
@@ -127,6 +142,10 @@ async function fetchText(url) {
   return response.text();
 }
 
+function getHrefPattern(label, href) {
+  return new RegExp(`<a(?=[^>]*href="${escapeRegExp(href)}")[^>]*>\s*${escapeRegExp(label)}\s*<\/a>`);
+}
+
 function getLinkedStylesheetUrls(html) {
   return [...html.matchAll(/<link[^>]+rel=["'][^"']*stylesheet[^"']*["'][^>]+href=["']([^"']+)["'][^>]*>/gi)].map(
     ([, href]) => new URL(href, `${BASE_URL}/`).toString(),
@@ -211,13 +230,15 @@ try {
     throw new Error(`Expected text/html but received "${contentType}".`);
   }
 
-  const missingSignals = PAGE_REQUIRED_SIGNALS.filter((signal) => !html.includes(signal));
+  const missingSignals = LANDING_REQUIRED_SIGNALS.filter((signal) => !html.includes(signal));
 
   if (missingSignals.length > 0) {
     throw new Error(`Landing is missing expected visible signals: ${missingSignals.join(', ')}`);
   }
 
-  const missingPlaceholders = DISABLED_PLACEHOLDER_LABELS.filter((label) => !getDisabledPlaceholderPattern(label).test(html));
+  const missingPlaceholders = LANDING_DISABLED_PLACEHOLDER_LABELS.filter(
+    (label) => !getDisabledPlaceholderPattern(label).test(html),
+  );
 
   if (missingPlaceholders.length > 0) {
     throw new Error(
@@ -227,6 +248,10 @@ try {
 
   if (html.includes('href="#"')) {
     throw new Error('Landing still exposes deceptive href="#" placeholders.');
+  }
+
+  if (!getHrefPattern('Pricing', '/pricing').test(html)) {
+    throw new Error('Landing is missing a real Pricing link to /pricing.');
   }
 
   const mainMatch = html.match(/<main[^>]*id="main-content"[^>]*>[\s\S]*?<\/main>/);
@@ -302,6 +327,41 @@ try {
     throw new Error(
       `Rendered CSS is missing expected mobile header evidence: ${missingMobileCssChecks.join(', ')}`,
     );
+  }
+
+  const pricingHtml = await fetchText(`${BASE_URL}/pricing`);
+  const pricingMissingSignals = PRICING_REQUIRED_SIGNALS.filter((signal) => !pricingHtml.includes(signal));
+
+  if (pricingMissingSignals.length > 0) {
+    throw new Error(`Pricing page is missing expected visible signals: ${pricingMissingSignals.join(', ')}`);
+  }
+
+  const pricingMissingPlaceholders = PRICING_DISABLED_PLACEHOLDER_LABELS.filter(
+    (label) => !getDisabledPlaceholderPattern(label).test(pricingHtml),
+  );
+
+  if (pricingMissingPlaceholders.length > 0) {
+    throw new Error(
+      `Pricing placeholders are missing honest disabled rendering for: ${pricingMissingPlaceholders.join(', ')}`,
+    );
+  }
+
+  if (!getHrefPattern('Pricing', '/pricing').test(pricingHtml)) {
+    throw new Error('Pricing page is missing a real Pricing link to /pricing.');
+  }
+
+  if (!pricingHtml.includes('site-header__link--active') || !pricingHtml.includes('aria-current="page"')) {
+    throw new Error('Pricing page header does not expose Pricing as the active destination.');
+  }
+
+  assertCount(pricingHtml, /class="pricing-plan-card(?:\s|--|")/g, 3, 'pricing plan cards');
+  assertCount(pricingHtml, /class="pricing-proof-card(?:\s|--|")/g, 2, 'pricing proof blocks');
+  ['Why Engineer-First Mocks?', 'Feature matrix', 'Developer FAQ'].forEach((signal) =>
+    assertIncludes(pricingHtml, signal, 'pricing page'),
+  );
+
+  if (pricingHtml.includes('ObsidianArchitect')) {
+    throw new Error('Pricing page still exposes the non-canonical ObsidianArchitect branding variant.');
   }
 
   console.log(`Smoke test passed for ${BASE_URL}/`);

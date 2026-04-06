@@ -1,19 +1,43 @@
 ---
-import { landingContent, type LandingLink } from '../../content/landing';
+import { landingContent } from '../../content/landing';
 
-const { brand, copyright } = landingContent.footer;
-const links: LandingLink[] = [...landingContent.footer.links];
+interface Props {
+  pageClass?: 'landing-page' | 'pricing-page';
+  brand?: string;
+  copyright?: string;
+}
+
+const {
+  pageClass = 'landing-page',
+  brand = 'Obsidian Architect',
+  copyright = landingContent.footer.copyright,
+} = Astro.props;
+
+type LinkLike = { label: string; href: string } | { label: string; placeholderReason: string };
+
+const footerContent = landingContent.footer as {
+  brand?: string;
+  copyright: string;
+  links: readonly LinkLike[];
+};
+
+const resolvedBrand = brand ?? footerContent.brand ?? 'Obsidian Architect';
+const links = [...footerContent.links] as LinkLike[];
+
+function hasHref(link: LinkLike): link is Extract<LinkLike, { href: string }> {
+  return 'href' in link;
+}
 ---
 
-<footer class="site-footer">
+<footer class={`site-footer ${pageClass}__site-footer`.trim()}>
   <div class="shell site-footer__content">
     <div class="site-footer__brand-block">
-      <strong>{brand}</strong>
+      <strong>{resolvedBrand}</strong>
       <span>{copyright}</span>
     </div>
     <nav aria-label="Footer">
       {links.map((link) => (
-        'href' in link ? (
+        hasHref(link) ? (
           <a href={link.href}>{link.label}</a>
         ) : (
           <span class="site-footer__placeholder" title={link.placeholderReason} aria-disabled="true">

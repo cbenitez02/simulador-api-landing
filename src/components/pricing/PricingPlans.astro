@@ -1,0 +1,53 @@
+---
+import Icon from '../Icon.astro';
+import type { PricingPlan } from '../../content/pricing';
+
+interface Props {
+  plans: readonly PricingPlan[];
+}
+
+const { plans } = Astro.props;
+---
+
+<section class="pricing-section pricing-plans" aria-labelledby="pricing-plans-title">
+  <div class="shell">
+    <h2 id="pricing-plans-title" class="pricing-section__sr-only">Pricing plans</h2>
+    <div class="pricing-plans__grid">
+      {plans.map((plan) => (
+        <article class:list={["pricing-plan-card", plan.featured && 'pricing-plan-card--featured']}>
+          {plan.badge && <span class="pricing-plan-card__badge">{plan.badge}</span>}
+          <div class="pricing-plan-card__header">
+            <p class="pricing-plan-card__name">{plan.name}</p>
+            <p class="pricing-plan-card__summary">{plan.summary}</p>
+            <p class="pricing-plan-card__price">
+              {plan.price}
+              <span>{plan.cadence}</span>
+            </p>
+          </div>
+
+          <ul class="pricing-plan-card__features">
+            {plan.features.map((feature) => (
+              <li>
+                <Icon name="check_circle" />
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          <a
+            href={plan.cta.href}
+            class:list={[
+              'button',
+              plan.featured ? 'button--primary' : 'button--secondary',
+              'pricing-plan-card__cta',
+            ]}
+          >
+            {plan.cta.label}
+          </a>
+
+          {plan.note && <p class="pricing-plan-card__note">{plan.note}</p>}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
