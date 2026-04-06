@@ -5,12 +5,16 @@ interface Props {
   activeNavLabel?: string;
   pageClass?: 'landing-page' | 'pricing-page';
   brand?: string;
+  primaryAction?: { label: string; href: string };
+  navLinks?: readonly LinkLike[];
 }
 
 const {
   activeNavLabel,
   pageClass = 'landing-page',
   brand = landingContent.header.brand,
+  primaryAction,
+  navLinks,
 } = Astro.props;
 
 type LinkLike = { label: string; href: string } | { label: string; placeholderReason: string };
@@ -22,8 +26,11 @@ const headerContent = landingContent.header as {
   actions?: { primary?: { label: string; href: string } };
 };
 
-const navLinks = [...headerContent.navLinks] as LinkLike[];
-const primaryAction = headerContent.primaryAction ?? headerContent.actions?.primary ?? { label: 'Get Started', href: '#cta' };
+const resolvedNavLinks = [...(navLinks ?? headerContent.navLinks)] as LinkLike[];
+const resolvedPrimaryAction = primaryAction
+  ?? headerContent.primaryAction
+  ?? headerContent.actions?.primary
+  ?? { label: 'Get Started', href: '#cta' };
 
 function hasHref(link: LinkLike): link is Extract<LinkLike, { href: string }> {
   return 'href' in link;
@@ -35,7 +42,7 @@ function hasHref(link: LinkLike): link is Extract<LinkLike, { href: string }> {
     <div class="site-header__group site-header__group--brand">
       <a href="/" class="site-header__brand">{brand}</a>
       <div class="site-header__nav" aria-label="Sections">
-        {navLinks.map((link) => (
+        {resolvedNavLinks.map((link) => (
           hasHref(link) ? (
             <a
               href={link.href}
@@ -58,8 +65,8 @@ function hasHref(link: LinkLike): link is Extract<LinkLike, { href: string }> {
     </div>
 
     <div class="site-header__group site-header__group--actions">
-      <a href={primaryAction.href} class="button button--primary button--small site-header__action">
-        {primaryAction.label}
+      <a href={resolvedPrimaryAction.href} class="button button--primary button--small site-header__action">
+        {resolvedPrimaryAction.label}
       </a>
     </div>
   </nav>
