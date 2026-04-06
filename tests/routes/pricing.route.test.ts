@@ -1,23 +1,54 @@
 import { describe, expect, it } from 'vitest';
 
+import Footer from '../../src/components/landing/Footer.astro';
+import Header from '../../src/components/landing/Header.astro';
+import { landingContent } from '../../src/content/landing';
 import { pricingContent } from '../../src/content/pricing';
 import PricingPage from '../../src/pages/pricing.astro';
 import {
   expectCount,
-  expectDisabledPlaceholder,
+  expectLabelAbsent,
   expectHonestLink,
   expectSectionIds,
   expectText,
   getMetaContent,
   getTitle,
 } from './_helpers/html-contracts';
-import { renderRoute } from './_helpers/render-route';
+import { renderAstro, renderRoute } from './_helpers/render-route';
 
 const pricingHeaderPrimaryAction = { label: 'Get Started', href: '#comparison' };
 const pricingPlatformHref = '/#simulation';
+const pricingHeaderNavLinks = landingContent.header.navLinks.map((link) => (
+  link.label === 'Platform'
+    ? { ...link, href: pricingPlatformHref }
+    : link
+));
+
+function findAnchorByLabel(document: Document, label: string) {
+  return [...document.querySelectorAll('a')].find((link) => link.textContent?.trim() === label);
+}
 
 describe('route contract: /pricing', async () => {
   const { document, html } = await renderRoute(PricingPage, '/pricing');
+  const { document: arbitraryActiveLabelDocument } = await renderAstro(Header, {
+    pathname: '/pricing',
+    props: {
+      activeNavLabel: 'Anything else',
+      brand: pricingContent.header.brand,
+      navLinks: pricingHeaderNavLinks,
+      pageClass: 'pricing-page',
+      primaryAction: pricingHeaderPrimaryAction,
+    },
+  });
+  const { document: footerOverrideDocument } = await renderAstro(Footer, {
+    pathname: '/pricing',
+    props: {
+      brand: pricingContent.footer.brand,
+      copyright: pricingContent.footer.copyright,
+      links: [{ label: 'Custom footer link', href: '/pricing#custom-footer-link' }],
+      pageClass: 'pricing-page',
+    },
+  });
 
   it('renders stable metadata and pricing branding', () => {
     expect(getTitle(document)).toBe(pricingContent.seo.title);
@@ -50,6 +81,9 @@ describe('route contract: /pricing', async () => {
     expectHonestLink(document, 'Platform', pricingPlatformHref);
     expectHonestLink(document, 'Pricing', '/pricing');
     expectHonestLink(document, pricingHeaderPrimaryAction.label, pricingHeaderPrimaryAction.href);
+    landingContent.footer.links.forEach((link) => {
+      expectHonestLink(document, link.label, link.href);
+    });
 
     pricingContent.plans.forEach((plan) => {
       expectHonestLink(document, plan.cta.label, plan.cta.href);
@@ -57,9 +91,39 @@ describe('route contract: /pricing', async () => {
     });
 
     ['Documentation', 'Changelog', 'Docs', 'GitHub', 'Contact'].forEach((label) => {
-      expectDisabledPlaceholder(document, label);
+      expectLabelAbsent(document, label);
     });
 
     expect(html).not.toMatch(/checkout|stripe|billing portal/i);
+  });
+
+  it('marks the known pricing nav label as current without breaking other links', () => {
+    const pricingLink = findAnchorByLabel(document, 'Pricing');
+    const platformLink = findAnchorByLabel(document, 'Platform');
+
+    expect(pricingLink?.getAttribute('href')).toBe('/pricing');
+    expect(pricingLink?.getAttribute('aria-current')).toBe('page');
+    expect(platformLink?.getAttribute('href')).toBe(pricingPlatformHref);
+    expect(platformLink?.getAttribute('aria-current')).toBeNull();
+  });
+
+  it('accepts arbitrary activeNavLabel values without invalidating header output', () => {
+    const navLinks = [...arbitraryActiveLabelDocument.querySelectorAll('.site-header__nav a')];
+
+    expect(navLinks).toHaveLength(pricingHeaderNavLinks.length);
+    pricingHeaderNavLinks.forEach((link) => {
+      expect(findAnchorByLabel(arbitraryActiveLabelDocument, link.label)?.getAttribute('href')).toBe(link.href);
+    });
+    expect(arbitraryActiveLabelDocument.querySelector('[aria-current="page"]')).toBeNull();
+    expect(arbitraryActiveLabelDocument.querySelector('[aria-disabled="true"]')).toBeNull();
+  });
+
+  it('supports explicit footer links overrides with the same href-only contract', () => {
+    const footerLinks = [...footerOverrideDocument.querySelectorAll('footer nav a')];
+
+    expect(footerLinks).toHaveLength(1);
+    expect(footerLinks[0]?.textContent?.trim()).toBe('Custom footer link');
+    expect(footerLinks[0]?.getAttribute('href')).toBe('/pricing#custom-footer-link');
+    expect(findAnchorByLabel(footerOverrideDocument, landingContent.footer.links[0].label)).toBeUndefined();
   });
 });

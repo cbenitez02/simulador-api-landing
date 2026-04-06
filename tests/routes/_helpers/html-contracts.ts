@@ -43,13 +43,10 @@ export function expectHonestLink(document: Document, label: string, href: string
   }
 }
 
-export function expectDisabledPlaceholder(document: Document, label: string) {
+export function expectLabelAbsent(document: Document, label: string) {
   const placeholder = findExactTextNode(document.querySelectorAll('[aria-disabled="true"]'), label);
-
-  expect(placeholder, `Expected disabled placeholder labeled "${label}"`).toBeTruthy();
-  expect(placeholder?.tagName.toLowerCase()).toBe('span');
-  expect(placeholder?.getAttribute('aria-disabled')).toBe('true');
-
   const navigableLink = findExactTextNode(document.querySelectorAll('a'), label);
-  expect(navigableLink, `Expected placeholder "${label}" to stay non-navigable`).toBeUndefined();
+
+  expect(placeholder, `Expected removed shell label "${label}" to stay absent from disabled placeholders`).toBeUndefined();
+  expect(navigableLink, `Expected removed shell label "${label}" to stay absent from navigable links`).toBeUndefined();
 }

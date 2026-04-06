@@ -11,11 +11,9 @@ const primaryAction: LandingLink = landingContent.cta.primaryAction;
       <div class="landing-cta__content">
         <h2>{title}</h2>
         <p>{description}</p>
-        {'href' in primaryAction && (
-          <a href={primaryAction.href} class="button button--primary button--large">
-            {primaryAction.label}
-          </a>
-        )}
+        <a href={primaryAction.href} class="button button--primary button--large">
+          {primaryAction.label}
+        </a>
       </div>
     </div>
   </div>

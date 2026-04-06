@@ -30,9 +30,6 @@ const LANDING_REQUIRED_SIGNALS = [
   'Edge Case Testing',
   'Start building without a backend today',
   CANONICAL_BRAND,
-  'Docs',
-  'GitHub',
-  'Contact',
 ];
 const PRICING_REQUIRED_SIGNALS = [
   `${CANONICAL_BRAND} Pricing`,
@@ -48,8 +45,7 @@ const PRICING_REQUIRED_SIGNALS = [
   'Developer FAQ',
   `Do I need a backend before using ${CANONICAL_BRAND}?`,
 ];
-const LANDING_DISABLED_PLACEHOLDER_LABELS = ['Documentation', 'Changelog', 'Docs', 'GitHub', 'Contact'];
-const PRICING_DISABLED_PLACEHOLDER_LABELS = ['Documentation', 'Changelog', 'Docs', 'GitHub', 'Contact'];
+const REMOVED_SHELL_LABELS = ['Documentation', 'Changelog', 'Docs', 'GitHub', 'Contact'];
 const MOBILE_HEADER_CSS_CHECKS = [
   {
     label: 'mobile breakpoint declaration',
@@ -263,10 +259,12 @@ function assertMetadataBranding(html, routeLabel) {
   }
 }
 
-function getDisabledPlaceholderPattern(label) {
-  return new RegExp(
-    `<span(?=[^>]*aria-disabled="true")(?=[^>]*title="[^"]+")[^>]*>\\s*${label}\\s*<\\/span>`,
-  );
+function assertLabelAbsent(html, label, routeLabel) {
+  const escapedLabel = escapeRegExp(label);
+
+  if (new RegExp(`>\\s*${escapedLabel}\\s*<`).test(html)) {
+    throw new Error(`Expected ${routeLabel} to keep removed shell label "${label}" absent.`);
+  }
 }
 
 function escapeRegExp(value) {
@@ -345,15 +343,7 @@ try {
 
   assertMetadataBranding(html, 'landing');
 
-  const missingPlaceholders = LANDING_DISABLED_PLACEHOLDER_LABELS.filter(
-    (label) => !getDisabledPlaceholderPattern(label).test(html),
-  );
-
-  if (missingPlaceholders.length > 0) {
-    throw new Error(
-      `Landing placeholders are missing honest disabled rendering for: ${missingPlaceholders.join(', ')}`,
-    );
-  }
+  REMOVED_SHELL_LABELS.forEach((label) => assertLabelAbsent(html, label, 'landing'));
 
   if (html.includes('href="#"')) {
     throw new Error('Landing still exposes deceptive href="#" placeholders.');
@@ -451,15 +441,7 @@ try {
 
   assertMetadataBranding(pricingHtml, 'pricing');
 
-  const pricingMissingPlaceholders = PRICING_DISABLED_PLACEHOLDER_LABELS.filter(
-    (label) => !getDisabledPlaceholderPattern(label).test(pricingHtml),
-  );
-
-  if (pricingMissingPlaceholders.length > 0) {
-    throw new Error(
-      `Pricing placeholders are missing honest disabled rendering for: ${pricingMissingPlaceholders.join(', ')}`,
-    );
-  }
+  REMOVED_SHELL_LABELS.forEach((label) => assertLabelAbsent(pricingHtml, label, 'pricing'));
 
   if (!getHrefPattern('Pricing', '/pricing').test(pricingHtml)) {
     throw new Error('Pricing page is missing a real Pricing link to /pricing.');

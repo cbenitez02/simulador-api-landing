@@ -18,16 +18,12 @@ const metrics = [...visual.metrics];
       <p>{description}</p>
 
       <div class="landing-hero__actions">
-        {'href' in primaryAction && (
-          <a href={primaryAction.href} class="button button--primary button--large">
-            {primaryAction.label}
-          </a>
-        )}
-        {'href' in secondaryAction && (
-          <a href={secondaryAction.href} class="button button--secondary button--large">
-            {secondaryAction.label}
-          </a>
-        )}
+        <a href={primaryAction.href} class="button button--primary button--large">
+          {primaryAction.label}
+        </a>
+        <a href={secondaryAction.href} class="button button--secondary button--large">
+          {secondaryAction.label}
+        </a>
       </div>
     </div>
 

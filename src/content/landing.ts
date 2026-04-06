@@ -1,4 +1,6 @@
-export type LandingLink = { label: string; href: string } | { label: string; placeholderReason: string };
+export type ShellLink = { label: string; href: string };
+
+export type LandingLink = ShellLink;
 
 export type LandingTone = 'primary' | 'secondary' | 'warning' | 'error';
 
@@ -28,19 +30,11 @@ export const landingContent = {
     navLinks: [
       { label: 'Platform', href: '#simulation' },
       {
-        label: 'Documentation',
-        placeholderReason: 'Documentation is not published in this landing-only scope yet.',
-      },
-      {
-        label: 'Changelog',
-        placeholderReason: 'Changelog does not have a public destination in the current scope.',
-      },
-      {
         label: 'Pricing',
         href: '/pricing',
       },
-    ] satisfies LandingLink[],
-    primaryAction: { label: 'Get Started', href: '#cta' } satisfies LandingLink,
+    ] satisfies readonly ShellLink[],
+    primaryAction: { label: 'Get Started', href: '#cta' } satisfies ShellLink,
   },
   hero: {
     title: {
@@ -239,21 +233,9 @@ export const landingContent = {
     copyright: '© 2024 Obsidian Architect. All rights reserved.',
     links: [
       {
-        label: 'Docs',
-        placeholderReason: 'Docs need a real destination before they can become a navigable footer link.',
-      },
-      {
-        label: 'GitHub',
-        placeholderReason: 'The canonical repository URL is not defined in the project artifacts yet.',
-      },
-      {
         label: 'Pricing',
         href: '/pricing',
       },
-      {
-        label: 'Contact',
-        placeholderReason: 'There is no contact flow in the current landing-only scope.',
-      },
-    ] satisfies LandingLink[],
+    ] satisfies readonly ShellLink[],
   },
 } as const;

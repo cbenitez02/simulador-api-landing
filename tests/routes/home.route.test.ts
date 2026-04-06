@@ -4,7 +4,7 @@ import { landingContent } from '../../src/content/landing';
 import HomePage from '../../src/pages/index.astro';
 import {
   expectCount,
-  expectDisabledPlaceholder,
+  expectLabelAbsent,
   expectHonestLink,
   expectSectionIds,
   expectText,
@@ -43,16 +43,20 @@ describe('route contract: /', async () => {
     expectCount(document, '.landing-use-case-card', landingContent.useCases.items.length);
   });
 
-  it('keeps real links navigable and placeholders honest', () => {
+  it('keeps real links navigable and removes placeholder shell labels', () => {
     expectHonestLink(document, landingContent.header.brand, '/');
-    expectHonestLink(document, 'Platform', '#simulation');
-    expectHonestLink(document, 'Pricing', '/pricing');
-    expectHonestLink(document, 'Get Started', '#cta');
+    landingContent.header.navLinks.forEach((link) => {
+      expectHonestLink(document, link.label, link.href);
+    });
+    expectHonestLink(document, landingContent.header.primaryAction.label, landingContent.header.primaryAction.href);
     expectHonestLink(document, 'View demo', '#demo');
     expectHonestLink(document, 'Create your first mock API', '#cta');
+    landingContent.footer.links.forEach((link) => {
+      expectHonestLink(document, link.label, link.href);
+    });
 
     ['Documentation', 'Changelog', 'Docs', 'GitHub', 'Contact'].forEach((label) => {
-      expectDisabledPlaceholder(document, label);
+      expectLabelAbsent(document, label);
     });
   });
 });
