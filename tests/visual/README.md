@@ -14,7 +14,9 @@ Esta capa cubre screenshots full-page de escritorio para `/` y `/pricing` con Pl
 - Sólo Chromium.
 - Sólo desktop.
 - Sólo `/` y `/pricing`.
-- No usa `stitch/*.png` como baseline automatizado; esas imágenes quedan como referencia manual.
+- `stitch/README.md` es la política fuente para autoridad y estado de los bundles manuales de `stitch/`.
+- No usa `stitch/*.png` ni ningún asset dentro de `stitch/` como baseline automatizado; esos archivos quedan como referencia manual.
+- Los únicos baselines automatizados aprobados viven en `tests/visual/__screenshots__/`.
 
 ## Guardrails de determinismo
 
