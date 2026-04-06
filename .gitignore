@@ -2,3 +2,5 @@ node_modules/
 .astro/
 dist/
 .atl/
+test-results/
+playwright-report/
